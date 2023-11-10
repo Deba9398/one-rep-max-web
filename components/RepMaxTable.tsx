@@ -1,5 +1,5 @@
 import { RepMaxValues } from '@/util/repMaxFormulas';
-import { Text } from '@mantine/core';
+import { Card, Text } from '@mantine/core';
 
 export default function RepMaxTable({
   repMaxValues,
@@ -9,9 +9,13 @@ export default function RepMaxTable({
   return (
     <div className='grid grid-cols-3 gap-4'>
       {Object.keys(repMaxValues).map((key) => (
-        <div
+        <Card
           key={key}
-          className='p-4 text-center rounded bg-white bg-opacity-5'
+          className='text-center'
+          shadow='sm'
+          padding='lg'
+          radius='md'
+          withBorder
         >
           <Text size='sm' c='dimmed'>
             {key}RM
@@ -19,7 +23,7 @@ export default function RepMaxTable({
           <Text size='md' fw={500}>
             {repMaxValues[key].toFixed(0)} lbs
           </Text>
-        </div>
+        </Card>
       ))}
     </div>
   );

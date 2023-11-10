@@ -23,7 +23,7 @@ export default function Home() {
     <main className='flex min-h-screen flex-col items-center justify-between'>
       <div className='flex items-center justify-between'>
         <Box maw={340} mx='auto'>
-          <Title order={2} className='pb-4 pt-4'>
+          <Title order={2} className='pb-4 pt-4 text-center'>
             1 Rep Max Calculator
           </Title>
           <div className='flex items-end pb-4 text-center'>
@@ -36,6 +36,7 @@ export default function Home() {
               -
             </Button>
             <NumberInput
+              className='px-1 text-center'
               size='xl'
               allowNegative={false}
               inputMode='decimal'
@@ -46,7 +47,7 @@ export default function Home() {
               handlersRef={weightLiftedRef}
               onChange={(val) => setWeightLifted(parseFloat(val.toString()))}
               value={weightLifted}
-              label='Weight Lifted (lbs)'
+              label='Weight'
               hideControls
             />
             <Button
@@ -69,10 +70,10 @@ export default function Home() {
               -
             </Button>
             <NumberInput
+              className='px-1 text-center'
               size='xl'
               inputMode='decimal'
               suffix=' reps'
-              className='text-center'
               clampBehavior='strict'
               allowNegative={false}
               min={0}
@@ -80,7 +81,7 @@ export default function Home() {
               handlersRef={repsPerformedRef}
               onChange={(val) => setRepsPerformed(parseFloat(val.toString()))}
               value={repsPerformed}
-              label='Reps Performed'
+              label='Reps'
               hideControls
             />
             <Button
