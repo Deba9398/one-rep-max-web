@@ -1,4 +1,4 @@
-export type RepMaxValues = { [key: number]: number };
+export type RepMaxValues = { [key: string]: number };
 
 const Rows = 12;
 
