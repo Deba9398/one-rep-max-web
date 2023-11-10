@@ -1,8 +1,8 @@
 'use client';
 import RepMaxTable from '@/components/RepMaxTable';
 import { calculateRepMaxValues } from '@/util/repMaxFormulas';
-import { Box, NumberInput, Title } from '@mantine/core';
-import { useState } from 'react';
+import { Box, NumberInput, NumberInputHandlers, Title } from '@mantine/core';
+import { useRef, useState } from 'react';
 
 export default function Home() {
   const [weightLifted, setWeightLifted] = useState<number>(135);
@@ -20,16 +20,31 @@ export default function Home() {
           <NumberInput
             size='lg'
             className='pb-4'
-            onChange={(val) => setWeightLifted(parseFloat(val.toString()))}
-            defaultValue={weightLifted}
+            allowNegative={false}
+            inputMode='decimal'
+            suffix=' lbs'
+            min={0}
+            max={1000}
+            onChange={(val) => setWeightLifted(parseFloat(val.toString()) || 0)}
+            value={weightLifted}
             label='Weight Lifted (lbs)'
+            hideControls
           />
           <NumberInput
             size='lg'
+            inputMode='decimal'
             className='pb-8'
-            onChange={(val) => setRepsPerformed(parseFloat(val.toString()))}
-            defaultValue={repsPerformed}
+            suffix=' reps'
+            clampBehavior='strict'
+            allowNegative={false}
+            min={0}
+            max={15}
+            onChange={(val) =>
+              setRepsPerformed(parseFloat(val.toString()) || 1)
+            }
+            value={repsPerformed}
             label='Reps Performed'
+            hideControls
           />
 
           <RepMaxTable repMaxValues={oneRepMax} />
