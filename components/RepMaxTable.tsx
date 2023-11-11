@@ -4,7 +4,15 @@ import {
   MultiFormulaRepMaxValues,
   RepMaxValueType,
 } from '@/util/repMaxFormulas';
-import { Accordion, Card, Space, Title, Text, Table } from '@mantine/core';
+import {
+  Accordion,
+  Card,
+  Space,
+  Title,
+  Text,
+  Table,
+  Divider,
+} from '@mantine/core';
 
 export const RepMaxRow = ({
   label,

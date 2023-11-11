@@ -10,6 +10,11 @@ export function calculateRepMaxValues(
 ): MultiFormulaRepMaxValues {
   const values: MultiFormulaRepMaxValues = {};
 
+  if (isNaN(weight) || isNaN(reps)) {
+    weight = 0;
+    reps = 0;
+  }
+
   function addValues(formula: string, repMaxValues: RepMaxValues) {
     Object.keys(repMaxValues).forEach((key) => {
       if (values[key] === undefined) {
