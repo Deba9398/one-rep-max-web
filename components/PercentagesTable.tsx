@@ -1,3 +1,4 @@
+import { formatWeight } from '@/util/formatter';
 import { calculateMetrics } from '@/util/mathUtils';
 import {
   MultiFormulaRepMaxValues,
@@ -22,14 +23,14 @@ const InnerContent = ({
         <div className='flex-1'>
           <Title order={4}>Range</Title>
           <div>
-            {Math.round(values[values.length - 1].value)} lbs -{' '}
-            {Math.round(values[0].value)} lbs
+            {formatWeight(values[values.length - 1].value)} -{' '}
+            {formatWeight(values[0].value)}
           </div>
         </div>
         <div className='flex-1'>
           <Title order={4}>Std. Deviation</Title>
           <div className={`${color}`}>
-            ±{stdDeviation.toFixed(1)} lbs ({percentDeviation.toFixed(1)}%)
+            ±{formatWeight(stdDeviation)} ({percentDeviation.toFixed(1)}%)
           </div>
         </div>
       </div>
@@ -43,7 +44,7 @@ const InnerContent = ({
         >
           <div className='flex-1'>{repMaxCalculation.formula}</div>
           <div>
-            {Math.round((repMaxCalculation.value * percentage) / 100)} lbs
+            {formatWeight((repMaxCalculation.value * percentage) / 100)}
           </div>
         </div>
       ))}
@@ -67,7 +68,7 @@ const PercentagesRow = ({
       <div className='flex-1'>{percentage}%</div>
       <div className='flex-none'>
         <span className={color}>●</span>{' '}
-        <span className='font-bold'>{Math.round(avg)} lbs</span>
+        <span className='font-bold'>{formatWeight(avg)}</span>
       </div>
     </div>
   );

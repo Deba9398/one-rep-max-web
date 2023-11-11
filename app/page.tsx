@@ -3,7 +3,12 @@ import { AppShell, Burger, Group, NavLink, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconExternalLink } from '@tabler/icons-react';
 import Image from 'next/image';
-import { OneRepMaxCalc } from '@/components/OneRepMaxCalc';
+
+import dynamic from 'next/dynamic';
+
+const OneRepMaxCalc = dynamic(() => import('../components/OneRepMaxCalc'), {
+  ssr: false,
+});
 
 export default function Home() {
   const [opened, { toggle }] = useDisclosure();

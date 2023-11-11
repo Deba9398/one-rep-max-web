@@ -1,18 +1,18 @@
 'use client';
 import PercentagesTable from '@/components/PercentagesTable';
 import RepMaxTable from '@/components/RepMaxTable';
+import { getWeightUnits } from '@/util/formatter';
 import { calculateRepMaxValues } from '@/util/repMaxFormulas';
 import {
   Box,
   Button,
   NumberInput,
   NumberInputHandlers,
-  Space,
   Title,
 } from '@mantine/core';
 import { useRef, useState } from 'react';
 
-export function OneRepMaxCalc() {
+export default function OneRepMaxCalc() {
   const [weightLifted, setWeightLifted] = useState<number>(135);
   const [repsPerformed, setRepsPerformed] = useState<number>(8);
 
@@ -38,14 +38,13 @@ export function OneRepMaxCalc() {
             size='xl'
             allowNegative={false}
             inputMode='decimal'
-            suffix=' lbs'
             min={0}
             max={1000}
             step={5}
             handlersRef={weightLiftedRef}
             onChange={(val) => setWeightLifted(parseFloat(val.toString()))}
             value={weightLifted}
-            label='Weight'
+            label={`Weight (${getWeightUnits()})`}
             hideControls
           />
           <Button
@@ -71,7 +70,6 @@ export function OneRepMaxCalc() {
             className='px-1 text-center'
             size='xl'
             inputMode='decimal'
-            suffix=' reps'
             clampBehavior='strict'
             allowNegative={false}
             min={0}
