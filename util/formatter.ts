@@ -1,4 +1,4 @@
-let cachedUnitPreference: string | null = readUnitPreference();
+let cachedUnitPreference: string = readUnitPreference();
 
 function readUnitPreference() {
   const userPref = localStorage.getItem('unitPreference');
@@ -9,12 +9,10 @@ function readUnitPreference() {
   return navigator.language.startsWith('en-US') ? 'lbs' : 'kg';
 }
 
-// Event listener to update cache when local storage changes
-window.addEventListener('storage', (event) => {
-  if (event.key === 'unitPreference') {
-    cachedUnitPreference = event.newValue;
-  }
-});
+export function setWeightUnits(units: string) {
+  cachedUnitPreference = units;
+  localStorage.setItem('unitPreference', units);
+}
 
 export function getWeightUnits() {
   return cachedUnitPreference;

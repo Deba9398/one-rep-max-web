@@ -4,7 +4,7 @@ import {
   MultiFormulaRepMaxValues,
   RepMaxValueType,
 } from '@/util/repMaxFormulas';
-import { Accordion, Card, Space, Title } from '@mantine/core';
+import { Accordion, Card, Space, Title, Text } from '@mantine/core';
 
 const InnerContent = ({
   values,
@@ -29,9 +29,9 @@ const InnerContent = ({
         </div>
         <div className='flex-1'>
           <Title order={4}>Std. Deviation</Title>
-          <div className={`${color}`}>
+          <Text c={color} fw={500}>
             ±{formatWeight(stdDeviation)} ({percentDeviation.toFixed(1)}%)
-          </div>
+          </Text>
         </div>
       </div>
       <Space h='lg' />
@@ -67,8 +67,9 @@ const PercentagesRow = ({
     <div className='flex text-lg'>
       <div className='flex-1'>{percentage}%</div>
       <div className='flex-none'>
-        <span className={color}>●</span>{' '}
-        <span className='font-bold'>{formatWeight(avg)}</span>
+        <Text c={color} size='lg' fw={500}>
+          {formatWeight(avg)}
+        </Text>
       </div>
     </div>
   );
@@ -87,7 +88,7 @@ export default function PercentagesTable({
     ) / repMaxValues[1].length;
 
   return (
-    <Card shadow='sm' padding='lg' radius='md' withBorder>
+    <Card shadow='sm' padding={0} radius='md' withBorder>
       <Accordion chevronPosition='left' multiple>
         {percentages.map((p) => (
           <Accordion.Item key={p} value={p.toString()}>

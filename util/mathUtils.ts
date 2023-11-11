@@ -28,11 +28,7 @@ export const calculateMetrics = (values: number[]) => {
   const percentDeviation = (stdDeviation / avg) * 100;
 
   const color =
-    percentDeviation <= 2
-      ? 'text-green-400'
-      : percentDeviation <= 4
-      ? 'text-yellow-400'
-      : 'text-red-400';
+    percentDeviation <= 2 ? 'green' : percentDeviation <= 4 ? 'yellow' : 'red';
 
   return {
     avg,

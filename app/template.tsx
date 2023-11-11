@@ -1,0 +1,123 @@
+'use client';
+import {
+  AppShell,
+  Group,
+  Burger,
+  Title,
+  NavLink,
+  Divider,
+  Button,
+  useMantineColorScheme,
+  useComputedColorScheme,
+  Tooltip,
+} from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { IconExternalLink, IconMoon, IconSun } from '@tabler/icons-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+export default function Template({ children }: { children: React.ReactNode }) {
+  const [opened, { toggle }] = useDisclosure();
+
+  return (
+    <AppShell
+      header={{ height: 64 }}
+      navbar={{
+        width: 300,
+        breakpoint: 'sm',
+        collapsed: { mobile: !opened },
+      }}
+      padding='md'
+    >
+      <AppShell.Header>
+        <Group h='100%' w='100%'>
+          <div className='flex flex-1 items-center'>
+            <div className='flex-1'>
+              <Group h='100%' w='100%' px='md'>
+                <Burger
+                  opened={opened}
+                  onClick={toggle}
+                  hiddenFrom='sm'
+                  size='sm'
+                />
+                <Image
+                  src='/logo.png'
+                  alt='1RM Calc Logo'
+                  width={36}
+                  height={36}
+                  priority
+                />
+                <Title order={3} className='pb-4 pt-4 text-center'>
+                  1 Rep Max Calculator
+                </Title>
+              </Group>
+            </div>
+            <div className='px-2'>
+              <ColorSchemeToggle />
+            </div>
+          </div>
+        </Group>
+      </AppShell.Header>
+
+      <NavBar />
+      <AppShell.Main>{children}</AppShell.Main>
+    </AppShell>
+  );
+}
+
+function ColorSchemeToggle() {
+  const { setColorScheme } = useMantineColorScheme();
+  const computedColorScheme = useComputedColorScheme('light', {
+    getInitialValueInEffect: true,
+  });
+
+  return (
+    <Button
+      variant='default'
+      px={16}
+      size='lg'
+      onClick={() =>
+        setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')
+      }
+    >
+      {computedColorScheme === 'light' ? <IconMoon /> : <IconSun />}
+    </Button>
+  );
+}
+
+function NavBar() {
+  const pathname = usePathname();
+
+  const activeLinks = [
+    {
+      label: '1 Rep Max Calculator',
+      href: '/',
+    },
+    {
+      label: 'Settings',
+      href: '/settings',
+    },
+  ];
+
+  return (
+    <AppShell.Navbar p='md'>
+      {activeLinks.map((l) => (
+        <NavLink
+          key={l.label}
+          label={l.label}
+          component={Link}
+          href={l.href}
+          active={pathname === l.href}
+        />
+      ))}
+      <Divider my='sm' />
+      <NavLink
+        label='Strength Standards'
+        href='https://exrx.net/Testing/WeightLifting/StrengthStandards'
+        target='_blank'
+        rightSection={<IconExternalLink size='1rem' stroke={1.5} />}
+      />
+    </AppShell.Navbar>
+  );
+}

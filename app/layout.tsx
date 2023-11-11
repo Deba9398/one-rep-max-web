@@ -22,12 +22,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <head>
-        <ColorSchemeScript />
-      </head>
       <body className={inter.className}>
-        <MantineProvider defaultColorScheme='auto'>{children}</MantineProvider>
+        <MantineProvider
+          defaultColorScheme='auto'
+          theme={{ primaryShade: { light: 7, dark: 4 } }}
+        >
+          {children}
+        </MantineProvider>
         <GoogleAnalytics />
+        <ColorSchemeScript />
       </body>
     </html>
   );

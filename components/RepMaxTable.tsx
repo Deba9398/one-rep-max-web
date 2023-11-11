@@ -1,10 +1,10 @@
 import { formatWeight } from '@/util/formatter';
-import { calculateMetrics, calculateStandardDeviation } from '@/util/mathUtils';
+import { calculateMetrics } from '@/util/mathUtils';
 import {
   MultiFormulaRepMaxValues,
   RepMaxValueType,
 } from '@/util/repMaxFormulas';
-import { Accordion, Card, Space, Title } from '@mantine/core';
+import { Accordion, Card, Space, Title, Text } from '@mantine/core';
 
 const RepMaxRow = ({
   repMax,
@@ -19,10 +19,11 @@ const RepMaxRow = ({
 
   return (
     <div className='flex text-lg'>
-      <div className='flex-1'>{repMax}RM</div>
+      <div className='flex-1'>{repMax} Rep Max</div>
       <div className='flex-none'>
-        <span className={color}>●</span>{' '}
-        <span className='font-bold'>{formatWeight(avg)}</span>
+        <Text size='lg' c={color} fw={500}>
+          {formatWeight(avg)}
+        </Text>
       </div>
     </div>
   );
@@ -51,9 +52,9 @@ const RepMaxRowContent = ({
         </div>
         <div className='flex-1'>
           <Title order={4}>Std. Deviation</Title>
-          <div className={`${color}`}>
+          <Text c={color} fw={500}>
             ±{formatWeight(stdDeviation, 1)} ({percentDeviation.toFixed(1)}%)
-          </div>
+          </Text>
         </div>
       </div>
       <Space h='lg' />
@@ -78,7 +79,7 @@ export default function RepMaxTable({
   repMaxValues: MultiFormulaRepMaxValues;
 }) {
   return (
-    <Card shadow='sm' padding='lg' radius='md' withBorder>
+    <Card shadow='sm' padding={0} radius='md' withBorder>
       <Accordion chevronPosition='left' multiple>
         {Object.keys(repMaxValues).map((key) => (
           <Accordion.Item key={key} value={key}>
