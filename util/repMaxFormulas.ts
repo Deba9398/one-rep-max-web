@@ -30,6 +30,8 @@ export function calculateRepMaxValues(
   addValues('Lombardi', lombardiRange(weight, reps));
   addValues('Mayhew et al.', mayhewEtAlRange(weight, reps));
   addValues('Wathan', wathanRange(weight, reps));
+  addValues('Lander', landerRange(weight, reps));
+  addValues("O'Connor et al.", oConnerEtAlRange(weight, reps));
 
   Object.keys(values).forEach((key) => {
     values[key].sort((a, b) => b.value - a.value);
@@ -126,6 +128,40 @@ function wathanRange(weight: number, reps: number) {
   };
   for (let i = 2; i <= Rows; i++) {
     map[i] = (0.488 + 0.538 * Math.pow(Math.E, -(3 * i) / 40)) * max;
+  }
+
+  return map;
+}
+
+function lander(weight: number, reps: number) {
+  return reps === 1 ? weight : (100 * weight) / (101.3 - 2.67123 * reps);
+}
+
+function landerRange(weight: number, reps: number) {
+  const max = lander(weight, reps);
+
+  const map: RepMaxValues = {
+    1: max,
+  };
+  for (let i = 2; i <= Rows; i++) {
+    map[i] = (1.013 - 0.0267123 * i) * max;
+  }
+
+  return map;
+}
+
+function oConnerEtAl(weight: number, reps: number) {
+  return reps === 1 ? weight : weight * (1 + 0.025 * reps);
+}
+
+function oConnerEtAlRange(weight: number, reps: number) {
+  const max = oConnerEtAl(weight, reps);
+
+  const map: RepMaxValues = {
+    1: max,
+  };
+  for (let i = 2; i <= Rows; i++) {
+    map[i] = (40 * max) / (40 + i);
   }
 
   return map;
