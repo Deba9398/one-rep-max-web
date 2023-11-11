@@ -17,3 +17,27 @@ export function calculateStandardDeviation(arr: number[]) {
 
   return standardDeviation;
 }
+
+export const calculateMetrics = (values: number[]) => {
+  const avg =
+    values.reduce((acc, repMaxCalculation) => acc + repMaxCalculation, 0) /
+    values.length;
+
+  const stdDeviation = calculateStandardDeviation(values);
+
+  const percentDeviation = (stdDeviation / avg) * 100;
+
+  const color =
+    percentDeviation <= 2
+      ? 'text-green-400'
+      : percentDeviation <= 4
+      ? 'text-yellow-400'
+      : 'text-red-400';
+
+  return {
+    avg,
+    color,
+    stdDeviation,
+    percentDeviation,
+  };
+};

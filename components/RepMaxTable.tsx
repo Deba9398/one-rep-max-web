@@ -1,37 +1,9 @@
-import { calculateStandardDeviation } from '@/util/mathUtils';
+import { calculateMetrics, calculateStandardDeviation } from '@/util/mathUtils';
 import {
   MultiFormulaRepMaxValues,
   RepMaxValueType,
 } from '@/util/repMaxFormulas';
 import { Accordion, Card, Space, Title } from '@mantine/core';
-
-const calculateMetrics = (repMaxCalculation: RepMaxValueType[]) => {
-  const avg =
-    repMaxCalculation.reduce(
-      (acc, repMaxCalculation) => acc + repMaxCalculation.value,
-      0
-    ) / repMaxCalculation.length;
-
-  const stdDeviation = calculateStandardDeviation(
-    repMaxCalculation.map((c) => c.value)
-  );
-
-  const percentDeviation = (stdDeviation / avg) * 100;
-
-  const color =
-    percentDeviation <= 2
-      ? 'text-green-400'
-      : percentDeviation <= 4
-      ? 'text-yellow-400'
-      : 'text-red-400';
-
-  return {
-    avg,
-    color,
-    stdDeviation,
-    percentDeviation,
-  };
-};
 
 const RepMaxRow = ({
   repMax,
@@ -40,7 +12,9 @@ const RepMaxRow = ({
   repMax: string;
   repMaxCalculation: RepMaxValueType[];
 }) => {
-  const { avg, color } = calculateMetrics(repMaxCalculation);
+  const { avg, color } = calculateMetrics(
+    repMaxCalculation.map((c) => c.value)
+  );
 
   return (
     <div className='flex text-lg'>
@@ -58,8 +32,9 @@ const RepMaxRowContent = ({
 }: {
   repMaxCalculation: RepMaxValueType[];
 }) => {
-  const { avg, color, stdDeviation, percentDeviation } =
-    calculateMetrics(repMaxCalculation);
+  const { color, stdDeviation, percentDeviation } = calculateMetrics(
+    repMaxCalculation.map((c) => c.value)
+  );
 
   return (
     <div>
