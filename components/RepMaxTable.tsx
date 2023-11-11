@@ -4,13 +4,13 @@ import {
   MultiFormulaRepMaxValues,
   RepMaxValueType,
 } from '@/util/repMaxFormulas';
-import { Accordion, Card, Space, Title, Text } from '@mantine/core';
+import { Accordion, Card, Space, Title, Text, Table } from '@mantine/core';
 
-const RepMaxRow = ({
-  repMax,
+export const RepMaxRow = ({
+  label,
   repMaxCalculation,
 }: {
-  repMax: string;
+  label: string;
   repMaxCalculation: RepMaxValueType[];
 }) => {
   const { avg, color } = calculateMetrics(
@@ -19,7 +19,7 @@ const RepMaxRow = ({
 
   return (
     <div className='flex text-lg'>
-      <div className='flex-1'>{repMax} Rep Max</div>
+      <div className='flex-1'>{label}</div>
       <div className='flex-none'>
         <Text size='lg' c={color} fw={500}>
           {formatWeight(avg)}
@@ -29,7 +29,7 @@ const RepMaxRow = ({
   );
 };
 
-const RepMaxRowContent = ({
+export const RepMaxRowContent = ({
   repMaxCalculation,
 }: {
   repMaxCalculation: RepMaxValueType[];
@@ -58,17 +58,18 @@ const RepMaxRowContent = ({
         </div>
       </div>
       <Space h='lg' />
-      {repMaxCalculation.map((calculation, i) => (
-        <div
-          key={calculation.formula}
-          className={`flex px-4 py-1 rounded bg-opacity-5 ${
-            i % 2 === 0 ? 'bg-white' : ''
-          }`}
-        >
-          <div className='flex-1'>{calculation.formula}</div>
-          <div>{formatWeight(calculation.value)}</div>
-        </div>
-      ))}
+      <Table striped highlightOnHover>
+        <Table.Tbody>
+          {repMaxCalculation.map((calculation, i) => (
+            <Table.Tr key={calculation.formula}>
+              <Table.Td>{calculation.formula}</Table.Td>
+              <Table.Td align='right'>
+                {formatWeight(calculation.value)}
+              </Table.Td>
+            </Table.Tr>
+          ))}
+        </Table.Tbody>
+      </Table>
     </div>
   );
 };
@@ -84,7 +85,10 @@ export default function RepMaxTable({
         {Object.keys(repMaxValues).map((key) => (
           <Accordion.Item key={key} value={key}>
             <Accordion.Control>
-              <RepMaxRow repMax={key} repMaxCalculation={repMaxValues[key]} />
+              <RepMaxRow
+                label={`${key} Rep Max`}
+                repMaxCalculation={repMaxValues[key]}
+              />
             </Accordion.Control>
             <Accordion.Panel>
               <RepMaxRowContent repMaxCalculation={repMaxValues[key]} />
