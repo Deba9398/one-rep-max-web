@@ -31,10 +31,6 @@ export function calculateRepMaxValues(
   return values;
 }
 
-export function calculateOneRepMax(weight: number, reps: number) {
-  return epley(weight, reps);
-}
-
 // ======================================
 // ============== FORMULAS ==============
 // ======================================

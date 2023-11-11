@@ -1,10 +1,7 @@
 'use client';
 import PercentagesTable from '@/components/PercentagesTable';
 import RepMaxTable from '@/components/RepMaxTable';
-import {
-  calculateOneRepMax,
-  calculateRepMaxValues,
-} from '@/util/repMaxFormulas';
+import { calculateRepMaxValues } from '@/util/repMaxFormulas';
 import {
   Box,
   Button,
@@ -22,7 +19,6 @@ export function OneRepMaxCalc() {
   const weightLiftedRef = useRef<NumberInputHandlers>(null);
   const repsPerformedRef = useRef<NumberInputHandlers>(null);
 
-  const oneRepMax = calculateOneRepMax(weightLifted, repsPerformed);
   const repMaxValues = calculateRepMaxValues(weightLifted, repsPerformed);
 
   return (
@@ -106,7 +102,7 @@ export function OneRepMaxCalc() {
           <Title order={3} className='pb-4 pt-4 text-center'>
             Percentages of 1RM
           </Title>
-          <PercentagesTable oneRepMax={oneRepMax} />
+          <PercentagesTable repMaxValues={repMaxValues} />
 
           <Space h='lg' />
         </Box>

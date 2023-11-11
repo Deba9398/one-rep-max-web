@@ -1,9 +1,8 @@
 import {
   MultiFormulaRepMaxValues,
   RepMaxValueType,
-  RepMaxValues,
 } from '@/util/repMaxFormulas';
-import { Accordion, Card, Paper, Table, Text } from '@mantine/core';
+import { Accordion, Card } from '@mantine/core';
 
 const RepMaxRow = ({
   repMax,
@@ -59,46 +58,5 @@ export default function RepMaxTable({
         ))}
       </Accordion>
     </Card>
-  );
-
-  return (
-    <Table>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>Rep Max</Table.Th>
-          <Table.Th>Weight</Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
-        {Object.keys(repMaxValues).map((key) => (
-          <Table.Tr key={key}>
-            <Table.Td>{key}RM</Table.Td>
-            <Table.Td>{repMaxValues[key].toFixed(0)} lbs</Table.Td>
-          </Table.Tr>
-        ))}
-      </Table.Tbody>
-    </Table>
-  );
-
-  return (
-    <div className='grid grid-cols-3 gap-4'>
-      {Object.keys(repMaxValues).map((key) => (
-        <Card
-          key={key}
-          className='text-center'
-          shadow='sm'
-          padding='lg'
-          radius='md'
-          withBorder
-        >
-          <Text size='sm' c='dimmed'>
-            {key}RM
-          </Text>
-          <Text size='md' fw={500}>
-            {repMaxValues[key].toFixed(0)} lbs
-          </Text>
-        </Card>
-      ))}
-    </div>
   );
 }
