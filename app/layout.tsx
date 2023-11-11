@@ -3,8 +3,11 @@ import { Inter } from 'next/font/google';
 import { MantineProvider, ColorSchemeScript } from '@mantine/core';
 import '@mantine/core/styles.css';
 import './globals.css';
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
+
+const isProduction = process.env.NODE_ENV === 'production';
 
 export const metadata: Metadata = {
   title: 'One Rep Max Calculator',
@@ -24,7 +27,32 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <MantineProvider defaultColorScheme='auto'>{children}</MantineProvider>
+        <GoogleAnalytics />
       </body>
     </html>
+  );
+}
+
+function GoogleAnalytics() {
+  if (!isProduction) {
+    return null;
+  }
+
+  return (
+    <>
+      <Script
+        async
+        src='https://www.googletagmanager.com/gtag/js?id=G-TS8S6LZJLM'
+      />
+      <Script id='google-analytics'>
+        {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-TS8S6LZJLM');
+          `}
+      </Script>
+    </>
   );
 }
