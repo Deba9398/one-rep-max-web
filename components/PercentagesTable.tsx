@@ -10,7 +10,7 @@ export default function PercentagesTable({
   const percentages = [100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 40];
 
   return (
-    <Card shadow='sm' padding={0} radius='md' withBorder>
+    <Card padding={0} radius='md' withBorder>
       <Accordion chevronPosition='left' multiple>
         {percentages.map((p) => {
           const values = repMaxValues[1].map((r) => ({

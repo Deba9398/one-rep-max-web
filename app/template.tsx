@@ -10,6 +10,9 @@ import {
   useMantineColorScheme,
   useComputedColorScheme,
   Tooltip,
+  useMantineTheme,
+  CSSVariablesResolver,
+  MantineProvider,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconExternalLink, IconMoon, IconSun } from '@tabler/icons-react';
@@ -17,52 +20,76 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+const resolver: CSSVariablesResolver = (theme) => ({
+  variables: {},
+  light: {
+    '--app-body-background': '#f8f9fa',
+  },
+  dark: {
+    '--app-body-background': '--mantine-color-body',
+  },
+});
+
 export default function Template({ children }: { children: React.ReactNode }) {
   const [opened, { toggle }] = useDisclosure();
 
-  return (
-    <AppShell
-      header={{ height: 64 }}
-      navbar={{
-        width: 300,
-        breakpoint: 'sm',
-        collapsed: { mobile: !opened },
-      }}
-      padding='md'
-    >
-      <AppShell.Header>
-        <Group h='100%' w='100%'>
-          <div className='flex flex-1 items-center'>
-            <div className='flex-1'>
-              <Group h='100%' w='100%' px='md'>
-                <Burger
-                  opened={opened}
-                  onClick={toggle}
-                  hiddenFrom='sm'
-                  size='sm'
-                />
-                <Image
-                  src='/logo.png'
-                  alt='1RM Calc Logo'
-                  width={36}
-                  height={36}
-                  priority
-                />
-                <Title order={3} className='pb-4 pt-4 text-center'>
-                  1 Rep Max Calculator
-                </Title>
-              </Group>
-            </div>
-            <div className='px-2'>
-              <ColorSchemeToggle />
-            </div>
-          </div>
-        </Group>
-      </AppShell.Header>
+  const lightModeBackground = '#f8f9fa'; // Your light mode background color
 
-      <NavBar />
-      <AppShell.Main>{children}</AppShell.Main>
-    </AppShell>
+  return (
+    <MantineProvider
+      defaultColorScheme='auto'
+      cssVariablesResolver={resolver}
+      theme={{ primaryShade: { light: 7, dark: 4 } }}
+    >
+      <AppShell
+        header={{ height: 64 }}
+        navbar={{
+          width: 300,
+          breakpoint: 'sm',
+          collapsed: { mobile: !opened },
+        }}
+        padding='md'
+      >
+        <AppShell.Header>
+          <Group h='100%' w='100%'>
+            <div className='flex flex-1 items-center'>
+              <div className='flex-1'>
+                <Group h='100%' w='100%' px='md'>
+                  <Burger
+                    opened={opened}
+                    onClick={toggle}
+                    hiddenFrom='sm'
+                    size='sm'
+                  />
+                  <Image
+                    src='/logo.png'
+                    alt='1RM Calc Logo'
+                    width={36}
+                    height={36}
+                    priority
+                  />
+                  <Title order={3} className='pb-4 pt-4 text-center'>
+                    1 Rep Max Calculator
+                  </Title>
+                </Group>
+              </div>
+              <div className='px-2'>
+                <ColorSchemeToggle />
+              </div>
+            </div>
+          </Group>
+        </AppShell.Header>
+
+        <NavBar />
+        <AppShell.Main
+          style={{
+            background: 'var(--app-body-background)',
+          }}
+        >
+          {children}
+        </AppShell.Main>
+      </AppShell>
+    </MantineProvider>
   );
 }
 

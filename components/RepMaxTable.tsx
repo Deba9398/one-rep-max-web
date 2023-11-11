@@ -88,7 +88,7 @@ export default function RepMaxTable({
   repMaxValues: MultiFormulaRepMaxValues;
 }) {
   return (
-    <Card shadow='sm' padding={0} radius='md' withBorder>
+    <Card padding={0} radius='md' withBorder>
       <Accordion chevronPosition='left' multiple>
         {Object.keys(repMaxValues).map((key) => (
           <Accordion.Item key={key} value={key}>

@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { MantineProvider, ColorSchemeScript } from '@mantine/core';
+import {
+  MantineProvider,
+  ColorSchemeScript,
+  CSSVariablesResolver,
+} from '@mantine/core';
 import '@mantine/core/styles.css';
 import './globals.css';
 import Script from 'next/script';
@@ -23,12 +27,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={inter.className}>
-        <MantineProvider
-          defaultColorScheme='auto'
-          theme={{ primaryShade: { light: 7, dark: 4 } }}
-        >
-          {children}
-        </MantineProvider>
+        {children}
         <GoogleAnalytics />
         <ColorSchemeScript />
       </body>

@@ -28,9 +28,9 @@ export default function OneRepMaxCalc() {
   return (
     <main className='flex flex-col items-center'>
       <Box maw={600} mx='auto'>
-        <Card shadow='sm' padding={'lg'} radius='md' withBorder>
+        <Card padding={'lg'} radius='md' withBorder>
           <div className='text-center'>
-            <Title order={3} pb={8}>
+            <Title order={4} pb={8}>
               Weight ({getWeightUnits()})
             </Title>
             <Button.Group>
@@ -77,7 +77,7 @@ export default function OneRepMaxCalc() {
 
           <Space h={12} />
           <div className='text-center'>
-            <Title order={3} pb={8}>
+            <Title order={4} pb={8}>
               Reps
             </Title>
             <Button.Group>
