@@ -13,6 +13,16 @@ import {
   Table,
   Divider,
 } from '@mantine/core';
+import {
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 
 export const RepMaxRow = ({
   label,
@@ -105,5 +115,85 @@ export default function RepMaxTable({
         ))}
       </Accordion>
     </Card>
+  );
+}
+
+export function RepMaxChart({
+  repMaxValues,
+}: {
+  repMaxValues: MultiFormulaRepMaxValues;
+}) {
+  let min = Number.MAX_SAFE_INTEGER;
+  let max = 0;
+
+  const data = Object.keys(repMaxValues).map((key) => {
+    const rep: { [key: string]: number | string } = {
+      name: key,
+    };
+
+    repMaxValues[key].forEach((formula) => {
+      max = Math.max(formula.value, max);
+      min = Math.min(formula.value, min);
+      rep[formula.formula] = formula.value;
+    });
+
+    return rep;
+  });
+
+  const chartColors = [
+    '#4169E1', // Royal Blue
+    '#DC143C', // Crimson Red
+    '#228B22', // Forest Green
+    '#FFD700', // Golden Yellow
+    '#663399', // Deep Purple
+    '#FF8C00', // Burnt Orange
+    '#008080', // Teal
+  ];
+
+  return (
+    <ResponsiveContainer width='95%' height={400}>
+      <LineChart
+        data={data}
+        margin={{
+          top: 0,
+          right: 0,
+          left: 0,
+          bottom: 0,
+        }}
+      >
+        <CartesianGrid strokeDasharray='3 3' />
+        <XAxis dataKey='name' />
+        <YAxis domain={[Math.floor(min), Math.ceil(max)]} />
+        <Tooltip
+        // content={({ active, payload, label }) => {
+        //   if (active && payload && payload.length) {
+        //     return (
+        //       <div className='custom-tooltip bg-white'>
+        //         {payload.map((p) => (
+        //           <li key={p.name}>
+        //             {p.name}: {formatWeight(p.value as number)}
+        //           </li>
+        //         ))}
+        //       </div>
+        //     );
+        //   }
+
+        //   return null;
+        // }}
+        />
+        <Legend />
+        {repMaxValues[1]
+          .sort((a, b) => a.formula.localeCompare(b.formula))
+          .map((c, i) => (
+            <Line
+              type='linear'
+              key={c.formula}
+              dataKey={c.formula}
+              stroke={chartColors[i]}
+              dot={false}
+            />
+          ))}
+      </LineChart>
+    </ResponsiveContainer>
   );
 }

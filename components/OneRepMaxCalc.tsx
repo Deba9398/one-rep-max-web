@@ -1,6 +1,6 @@
 'use client';
 import PercentagesTable from '@/components/PercentagesTable';
-import RepMaxTable from '@/components/RepMaxTable';
+import RepMaxTable, { RepMaxChart } from '@/components/RepMaxTable';
 import { getWeightUnits } from '@/util/formatter';
 import { calculateRepMaxValues } from '@/util/repMaxFormulas';
 import {
@@ -125,6 +125,7 @@ export default function OneRepMaxCalc() {
       </Box>
 
       <div className='container mx-auto mt-8'>
+        <RepMaxChart repMaxValues={repMaxValues} />
         <div className='flex flex-col items-center justify-center xl:flex-row xl:items-start -mx-2 lg:-mx-0'>
           <div className='px-2 xl:px-4 w-full xl:w-1/2 max-w-[600px]'>
             <Title order={4} className='pb-4 pt-4 text-center'>
