@@ -1,11 +1,16 @@
 'use client';
+import PercentagesTable from '@/components/PercentagesTable';
 import RepMaxTable from '@/components/RepMaxTable';
-import { calculateRepMaxValues } from '@/util/repMaxFormulas';
+import {
+  calculateOneRepMax,
+  calculateRepMaxValues,
+} from '@/util/repMaxFormulas';
 import {
   Box,
   Button,
   NumberInput,
   NumberInputHandlers,
+  Space,
   Title,
 } from '@mantine/core';
 import { useRef, useState } from 'react';
@@ -17,7 +22,8 @@ export default function Home() {
   const weightLiftedRef = useRef<NumberInputHandlers>(null);
   const repsPerformedRef = useRef<NumberInputHandlers>(null);
 
-  const oneRepMax = calculateRepMaxValues(weightLifted, repsPerformed);
+  const oneRepMax = calculateOneRepMax(weightLifted, repsPerformed);
+  const repMaxValues = calculateRepMaxValues(weightLifted, repsPerformed);
 
   return (
     <main className='flex min-h-screen flex-col items-center justify-between'>
@@ -94,7 +100,16 @@ export default function Home() {
             </Button>
           </div>
 
-          <RepMaxTable repMaxValues={oneRepMax} />
+          <Title order={3} className='pb-4 pt-4 text-center'>
+            Rep Max
+          </Title>
+          <RepMaxTable repMaxValues={repMaxValues} />
+
+          <Space h='lg' />
+          <Title order={3} className='pb-4 pt-4 text-center'>
+            Percentages of 1RM
+          </Title>
+          <PercentagesTable oneRepMax={oneRepMax} />
         </Box>
       </div>
     </main>
