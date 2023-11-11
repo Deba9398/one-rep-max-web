@@ -28,7 +28,7 @@ export function OneRepMaxCalc() {
   return (
     <main className='flex min-h-screen flex-col items-center justify-between'>
       <div className='flex items-center justify-between'>
-        <Box maw={340} mx='auto'>
+        <Box maw={600} mx='auto'>
           <div className='flex items-end pb-4 text-center'>
             <Button
               size='xl'
