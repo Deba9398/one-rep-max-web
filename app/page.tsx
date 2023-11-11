@@ -1,117 +1,51 @@
 'use client';
-import PercentagesTable from '@/components/PercentagesTable';
-import RepMaxTable from '@/components/RepMaxTable';
-import {
-  calculateOneRepMax,
-  calculateRepMaxValues,
-} from '@/util/repMaxFormulas';
-import {
-  Box,
-  Button,
-  NumberInput,
-  NumberInputHandlers,
-  Space,
-  Title,
-} from '@mantine/core';
-import { useRef, useState } from 'react';
+import { AppShell, Burger, Group, NavLink, Title } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { IconExternalLink } from '@tabler/icons-react';
+import Image from 'next/image';
+import { OneRepMaxCalc } from '@/components/OneRepMaxCalc';
 
 export default function Home() {
-  const [weightLifted, setWeightLifted] = useState<number>(135);
-  const [repsPerformed, setRepsPerformed] = useState<number>(8);
-
-  const weightLiftedRef = useRef<NumberInputHandlers>(null);
-  const repsPerformedRef = useRef<NumberInputHandlers>(null);
-
-  const oneRepMax = calculateOneRepMax(weightLifted, repsPerformed);
-  const repMaxValues = calculateRepMaxValues(weightLifted, repsPerformed);
+  const [opened, { toggle }] = useDisclosure();
 
   return (
-    <main className='flex min-h-screen flex-col items-center justify-between'>
-      <div className='flex items-center justify-between'>
-        <Box maw={340} mx='auto'>
-          <Title order={2} className='pb-4 pt-4 text-center'>
+    <AppShell
+      header={{ height: 64 }}
+      navbar={{
+        width: 300,
+        breakpoint: 'sm',
+        collapsed: { mobile: !opened },
+      }}
+      padding='md'
+    >
+      <AppShell.Header>
+        <Group h='100%' px='md'>
+          <Burger opened={opened} onClick={toggle} hiddenFrom='sm' size='sm' />
+          <Image
+            src='/logo.png'
+            alt='1RM Calc Logo'
+            width={36}
+            height={36}
+            priority
+          />
+          <Title order={3} className='pb-4 pt-4 text-center'>
             1 Rep Max Calculator
           </Title>
-          <div className='flex items-end pb-4 text-center'>
-            <Button
-              size='xl'
-              disabled={weightLifted <= 0}
-              onClick={() => weightLiftedRef.current?.decrement()}
-              variant='default'
-            >
-              -
-            </Button>
-            <NumberInput
-              className='px-1 text-center'
-              size='xl'
-              allowNegative={false}
-              inputMode='decimal'
-              suffix=' lbs'
-              min={0}
-              max={1000}
-              step={5}
-              handlersRef={weightLiftedRef}
-              onChange={(val) => setWeightLifted(parseFloat(val.toString()))}
-              value={weightLifted}
-              label='Weight'
-              hideControls
-            />
-            <Button
-              size='xl'
-              disabled={weightLifted >= 1000}
-              onClick={() => weightLiftedRef.current?.increment()}
-              variant='default'
-            >
-              +
-            </Button>
-          </div>
+        </Group>
+      </AppShell.Header>
 
-          <div className='flex items-end pb-8 text-center'>
-            <Button
-              size='xl'
-              disabled={repsPerformed <= 1}
-              onClick={() => repsPerformedRef.current?.decrement()}
-              variant='default'
-            >
-              -
-            </Button>
-            <NumberInput
-              className='px-1 text-center'
-              size='xl'
-              inputMode='decimal'
-              suffix=' reps'
-              clampBehavior='strict'
-              allowNegative={false}
-              min={0}
-              max={15}
-              handlersRef={repsPerformedRef}
-              onChange={(val) => setRepsPerformed(parseFloat(val.toString()))}
-              value={repsPerformed}
-              label='Reps'
-              hideControls
-            />
-            <Button
-              size='xl'
-              disabled={repsPerformed >= 15}
-              onClick={() => repsPerformedRef.current?.increment()}
-              variant='default'
-            >
-              +
-            </Button>
-          </div>
-
-          <Title order={3} className='pb-4 pt-4 text-center'>
-            Rep Max
-          </Title>
-          <RepMaxTable repMaxValues={repMaxValues} />
-
-          <Space h='lg' />
-          <Title order={3} className='pb-4 pt-4 text-center'>
-            Percentages of 1RM
-          </Title>
-          <PercentagesTable oneRepMax={oneRepMax} />
-        </Box>
-      </div>
-    </main>
+      <AppShell.Navbar p='md'>
+        <NavLink label='1 Rep Max Calculator' active />
+        <NavLink
+          label='Strength Standards'
+          href='https://exrx.net/Testing/WeightLifting/StrengthStandards'
+          target='_blank'
+          rightSection={<IconExternalLink size='1rem' stroke={1.5} />}
+        />
+      </AppShell.Navbar>
+      <AppShell.Main>
+        <OneRepMaxCalc />
+      </AppShell.Main>
+    </AppShell>
   );
 }
