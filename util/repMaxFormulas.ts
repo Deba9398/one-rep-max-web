@@ -23,6 +23,8 @@ export function calculateRepMaxValues(
   addValues('Epley', epleyRange(weight, reps));
   addValues('Brzycki', brzyckiRange(weight, reps));
   addValues('Lombardi', lombardiRange(weight, reps));
+  addValues('Mayhew et al.', mayhewEtAlRange(weight, reps));
+  addValues('Wathan', wathanRange(weight, reps));
 
   Object.keys(values).forEach((key) => {
     values[key].sort((a, b) => b.value - a.value);
@@ -81,6 +83,44 @@ function lombardiRange(weight: number, reps: number) {
   };
   for (let i = 2; i <= Rows; i++) {
     map[i] = max / Math.pow(i, 0.1);
+  }
+
+  return map;
+}
+
+function mayhewEtAl(weight: number, reps: number) {
+  return reps === 1
+    ? weight
+    : weight / (0.522 + 0.419 * Math.pow(Math.E, -0.055 * reps));
+}
+
+function mayhewEtAlRange(weight: number, reps: number) {
+  const max = mayhewEtAl(weight, reps);
+
+  const map: RepMaxValues = {
+    1: max,
+  };
+  for (let i = 2; i <= Rows; i++) {
+    map[i] = (0.522 + 0.419 * Math.pow(Math.E, -(11 * i) / 200)) * max;
+  }
+
+  return map;
+}
+
+function wathan(weight: number, reps: number) {
+  return reps === 1
+    ? weight
+    : weight / (0.488 + 0.538 * Math.pow(Math.E, -0.075 * reps));
+}
+
+function wathanRange(weight: number, reps: number) {
+  const max = wathan(weight, reps);
+
+  const map: RepMaxValues = {
+    1: max,
+  };
+  for (let i = 2; i <= Rows; i++) {
+    map[i] = (0.488 + 0.538 * Math.pow(Math.E, -(3 * i) / 40)) * max;
   }
 
   return map;
