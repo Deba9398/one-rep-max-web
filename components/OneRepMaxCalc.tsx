@@ -38,7 +38,7 @@ export default function OneRepMaxCalc() {
                 size='xl'
                 disabled={weightLifted <= 0}
                 onClick={() => weightLiftedHandlersRef.current?.decrement()}
-                variant='light'
+                variant='default'
               >
                 -
               </Button>
@@ -68,7 +68,7 @@ export default function OneRepMaxCalc() {
                 size='xl'
                 disabled={weightLifted >= 1000}
                 onClick={() => weightLiftedHandlersRef.current?.increment()}
-                variant='light'
+                variant='default'
               >
                 +
               </Button>
@@ -85,7 +85,7 @@ export default function OneRepMaxCalc() {
                 size='xl'
                 disabled={repsPerformed <= 1}
                 onClick={() => repsPerformedHandlersRef.current?.decrement()}
-                variant='light'
+                variant='default'
               >
                 -
               </Button>
@@ -115,7 +115,7 @@ export default function OneRepMaxCalc() {
                 size='xl'
                 disabled={repsPerformed >= 15}
                 onClick={() => repsPerformedHandlersRef.current?.increment()}
-                variant='light'
+                variant='default'
               >
                 +
               </Button>
