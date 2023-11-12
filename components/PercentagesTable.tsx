@@ -22,7 +22,13 @@ export default function PercentagesTable({
               <Accordion.Control>
                 <RepMaxRow label={`${p}%`} repMaxCalculation={values} />
               </Accordion.Control>
-              <Accordion.Panel>
+              <Accordion.Panel
+                styles={{
+                  content: {
+                    padding: 0,
+                  },
+                }}
+              >
                 <RepMaxRowContent repMaxCalculation={values} />
               </Accordion.Panel>
             </Accordion.Item>

@@ -1,15 +1,8 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import {
-  MantineProvider,
-  ColorSchemeScript,
-  CSSVariablesResolver,
-} from '@mantine/core';
+import { ColorSchemeScript } from '@mantine/core';
 import '@mantine/core/styles.css';
 import './globals.css';
 import Script from 'next/script';
-
-const inter = Inter({ subsets: ['latin'] });
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -29,7 +22,7 @@ export default function RootLayout({
       <head>
         <ColorSchemeScript />
       </head>
-      <body className={inter.className}>
+      <body>
         {children}
         <GoogleAnalytics />
       </body>
