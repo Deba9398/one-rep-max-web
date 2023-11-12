@@ -27,13 +27,12 @@ export default function Settings() {
 
   return (
     <div className='flex flex-col items-center'>
-      <Title order={3} className='pb-4 pt-4 text-center'>
+      <Title order={4} className='pb-4 pt-4 text-center'>
         Settings
       </Title>
 
       <Card
         className='w-full max-w-[600px]'
-        shadow='sm'
         padding='lg'
         radius='md'
         withBorder

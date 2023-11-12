@@ -30,5 +30,5 @@ export function formatWeight(weight: number, decimalPlaces: number = 0) {
 
   const roundedWeight = roundToDecimalPlaces(weight, decimalPlaces);
 
-  return `${roundedWeight} ${cachedUnitPreference}`;
+  return `${roundedWeight.toFixed(decimalPlaces)} ${cachedUnitPreference}`;
 }
