@@ -7,6 +7,7 @@ import {
   Box,
   Button,
   Card,
+  Group,
   NumberInput,
   NumberInputHandlers,
   Space,
@@ -25,33 +26,41 @@ export default function OneRepMaxCalc() {
 
   const repMaxValues = calculateRepMaxValues(weightLifted, repsPerformed);
 
+  const numberButtonProps = {
+    size: 'xl',
+    radius: '50%',
+    w: 60,
+    h: 60,
+    p: 8,
+    variant: 'light',
+  };
+
   return (
     <main className='flex flex-col items-center'>
       <Box maw={600} mx='auto'>
-        <Card padding={'lg'} radius='md' withBorder>
+        <Card padding='xl' radius='lg' withBorder>
           <div className='text-center'>
             <Title order={4} pb={8}>
               Weight ({getWeightUnits()})
             </Title>
-            <Button.Group>
+            <Group gap={0}>
               <Button
-                size='xl'
+                {...numberButtonProps}
                 disabled={weightLifted <= 0}
                 onClick={() => weightLiftedHandlersRef.current?.decrement()}
-                variant='default'
               >
                 -
               </Button>
               <NumberInput
-                className='px-1 text-center'
+                className='text-center flex-1 px-4'
                 size='xl'
                 allowNegative={false}
                 inputMode='decimal'
                 min={0}
                 max={1000}
                 step={5}
-                px={0}
-                radius={0}
+                radius={'xl'}
+                width={'100%'}
                 ref={weightLiftedInputRef}
                 handlersRef={weightLiftedHandlersRef}
                 onChange={(val) => setWeightLifted(parseFloat(val.toString()))}
@@ -65,14 +74,13 @@ export default function OneRepMaxCalc() {
                 }}
               />
               <Button
-                size='xl'
+                {...numberButtonProps}
                 disabled={weightLifted >= 1000}
                 onClick={() => weightLiftedHandlersRef.current?.increment()}
-                variant='default'
               >
                 +
               </Button>
-            </Button.Group>
+            </Group>
           </div>
 
           <Space h={12} />
@@ -80,25 +88,23 @@ export default function OneRepMaxCalc() {
             <Title order={4} pb={8}>
               Reps
             </Title>
-            <Button.Group>
+            <Group gap={0}>
               <Button
-                size='xl'
+                {...numberButtonProps}
                 disabled={repsPerformed <= 1}
                 onClick={() => repsPerformedHandlersRef.current?.decrement()}
-                variant='default'
               >
                 -
               </Button>
               <NumberInput
-                className='px-1 text-center'
+                className='text-center flex-1 px-4'
                 size='xl'
                 inputMode='decimal'
                 clampBehavior='strict'
                 allowNegative={false}
                 min={1}
                 max={15}
-                px={0}
-                radius={0}
+                radius='xl'
                 ref={repsPerformedInputRef}
                 handlersRef={repsPerformedHandlersRef}
                 onChange={(val) => setRepsPerformed(parseFloat(val.toString()))}
@@ -112,15 +118,15 @@ export default function OneRepMaxCalc() {
                 }}
               />
               <Button
-                size='xl'
+                {...numberButtonProps}
                 disabled={repsPerformed >= 15}
                 onClick={() => repsPerformedHandlersRef.current?.increment()}
-                variant='default'
               >
                 +
               </Button>
-            </Button.Group>
+            </Group>
           </div>
+          <Space h={12} />
         </Card>
       </Box>
 

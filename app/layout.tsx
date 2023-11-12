@@ -26,10 +26,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
+      <head>
+        <ColorSchemeScript />
+      </head>
       <body className={inter.className}>
         {children}
         <GoogleAnalytics />
-        <ColorSchemeScript />
       </body>
     </html>
   );

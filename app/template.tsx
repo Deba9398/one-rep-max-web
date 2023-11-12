@@ -9,10 +9,9 @@ import {
   Button,
   useMantineColorScheme,
   useComputedColorScheme,
-  Tooltip,
-  useMantineTheme,
   CSSVariablesResolver,
   MantineProvider,
+  MantineThemeOverride,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconExternalLink, IconMoon, IconSun } from '@tabler/icons-react';
@@ -21,25 +20,33 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const resolver: CSSVariablesResolver = (theme) => ({
-  variables: {},
+  variables: {
+    '--title-fw': '500',
+  },
   light: {
     '--app-body-background': '#f8f9fa',
+    '--mantine-color-text': '#333',
   },
   dark: {
     '--app-body-background': '--mantine-color-body',
   },
 });
 
+const themeOverrides: MantineThemeOverride = {
+  primaryShade: { light: 7, dark: 4 },
+  headings: {
+    fontWeight: '500',
+  },
+};
+
 export default function Template({ children }: { children: React.ReactNode }) {
   const [opened, { toggle }] = useDisclosure();
-
-  const lightModeBackground = '#f8f9fa'; // Your light mode background color
 
   return (
     <MantineProvider
       defaultColorScheme='auto'
       cssVariablesResolver={resolver}
-      theme={{ primaryShade: { light: 7, dark: 4 } }}
+      theme={themeOverrides}
     >
       <AppShell
         header={{ height: 64 }}
