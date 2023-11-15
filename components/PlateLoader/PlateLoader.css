@@ -1,0 +1,62 @@
+.plate-loader {
+  .plate-loader__bar {
+    background: linear-gradient(90deg, #bbb, #eee, #bbb);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+  }
+
+  .plate-loader__plate {
+    position: relative;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    font-size: 24px;
+    font-weight: 700;
+    box-shadow: inset -1px -3px 0px rgba(0, 0, 0, 0.2),
+      inset 1px 3px 0px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(
+      90deg,
+      color(#ccc shade(20%)),
+      #ccc,
+      color(#ccc shade(20%))
+    );
+
+    &.red {
+      background: linear-gradient(
+        90deg,
+        color(#e57373 shade(20%)),
+        #e57373,
+        color(#e57373 shade(20%))
+      );
+    }
+
+    &.blue {
+      background: linear-gradient(
+        90deg,
+        color(#64b5f6 shade(20%)),
+        #64b5f6,
+        color(#64b5f6 shade(20%))
+      );
+    }
+
+    &.yellow {
+      background: linear-gradient(
+        90deg,
+        color(#fff176 shade(20%)),
+        #fff176,
+        color(#fff176 shade(20%))
+      );
+    }
+
+    &.green {
+      background: linear-gradient(
+        90deg,
+        color(#81c784 shade(20%)),
+        #81c784,
+        color(#81c784 shade(20%))
+      );
+    }
+  }
+}

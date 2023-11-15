@@ -13,6 +13,7 @@ import {
   Table,
   Divider,
 } from '@mantine/core';
+import PlateLoader from './PlateLoader';
 
 export const RepMaxRow = ({
   label,
@@ -42,7 +43,7 @@ export const RepMaxRowContent = ({
 }: {
   repMaxCalculation: RepMaxValueType[];
 }) => {
-  const { color, stdDeviation, percentDeviation } = calculateMetrics(
+  const { avg, color, stdDeviation, percentDeviation } = calculateMetrics(
     repMaxCalculation.map((c) => c.value)
   );
 
@@ -67,6 +68,11 @@ export const RepMaxRowContent = ({
         </div>
       </div>
       <Space h='lg' />
+      <div className='flex justify-center'>
+        <PlateLoader weight={avg} />
+      </div>
+      <Divider />
+
       <Table striped highlightOnHover horizontalSpacing='md'>
         <Table.Thead>
           <Table.Tr>
