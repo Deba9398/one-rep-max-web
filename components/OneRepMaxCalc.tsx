@@ -130,6 +130,8 @@ export default function OneRepMaxCalc() {
         </Card>
       </Box>
 
+      <BarbellPlate weight={repMaxValues[1][0].value} />
+
       <div className='container mx-auto mt-8'>
         <div className='flex flex-col items-center justify-center xl:flex-row xl:items-start -mx-2 lg:-mx-0'>
           <div className='px-2 xl:px-4 w-full xl:w-1/2 max-w-[600px]'>
@@ -149,3 +151,119 @@ export default function OneRepMaxCalc() {
     </main>
   );
 }
+
+const BarbellPlate = ({ weight }: { weight: number }) => {
+  const barWeight = 45;
+  const plateWeights = [45, 25, 10, 5, 2.5]; // In pounds
+  let weightToLoad = (weight - barWeight) / 2;
+  let platesNeeded = [];
+
+  plateWeights.forEach((plateWeight) => {
+    while (weightToLoad >= plateWeight) {
+      platesNeeded.push(plateWeight);
+      weightToLoad -= plateWeight;
+    }
+  });
+
+  // Function to determine the color of the plate based on Olympic standards
+  const getPlateColor = (plate) => {
+    switch (plate) {
+      case 55:
+        return '#EF5350'; // 55 lb is typically red
+      case 45:
+        return '#42A5F5'; // 45lb is typically red
+      case 35:
+        return '#FFEE58'; // 35lb is typically blue
+      case 25:
+        return '#66BB6A'; // 25lb is typically green
+      case 10:
+        return 'white'; // 10lb is typically not standardized, gray for simplicity
+      case 5:
+        return '#42A5F5'; // 5lb is typically white
+      case 2.5:
+        return '#66BB6A'; // 2.5lb is typically black
+      default:
+        return 'black';
+    }
+  };
+
+  // Function to determine the size of the plate based on its weight
+  const getPlateSizeStyles = (plate) => {
+    const baseWidth = 1.5; // Base width for the smallest plate
+    const height = plate >= 25 ? '100%' : `${3 * plate + 25}%`;
+    const width = plate >= 25 ? baseWidth * plate : 30;
+    return { height, width: `${width}px` };
+  };
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        marginTop: '20px',
+        height: '300px',
+      }}
+    >
+      {/* Bar */}
+      <div
+        style={{
+          height: '20px',
+          width: '200px',
+          backgroundColor: '#adb5bd',
+          position: 'relative',
+        }}
+      ></div>
+      <div
+        style={{
+          height: '50px',
+          width: '15px',
+          backgroundColor: '#adb5bd',
+          position: 'relative',
+        }}
+      ></div>
+      {/* Plates */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          height: '100%',
+        }}
+      >
+        {platesNeeded.map((plate, index) => {
+          const { height, width } = getPlateSizeStyles(plate);
+          return (
+            <div
+              key={index}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height,
+                width,
+                backgroundColor: getPlateColor(plate),
+                border: '1px solid black',
+                borderRadius: '8px',
+                writingMode: 'vertical-rl',
+                textOrientation: 'mixed',
+                fontSize: '20px',
+                fontWeight: '500',
+                //position: 'absolute',
+                //left: `${300 + index * (parseInt(width) + 2)}px`, // Position plates along the bar
+              }}
+            >
+              {plate}
+            </div>
+          );
+        })}
+      </div>
+      <div
+        style={{
+          height: '30px',
+          width: '100px',
+          backgroundColor: '#adb5bd',
+          position: 'relative',
+        }}
+      ></div>
+    </div>
+  );
+};
