@@ -46,24 +46,29 @@ export function FormatWeight({
   weight,
   decimalPlaces = 0,
   forceDecimals = true,
+  littleDecimal = false,
 }: {
   weight: number;
   decimalPlaces?: number;
   forceDecimals?: boolean;
+  littleDecimal?: boolean;
 }) {
   if (!cachedUnitPreference) {
     cachedUnitPreference = readUnitPreference();
   }
 
   const roundedWeight = roundToDecimalPlaces(weight, decimalPlaces);
+  const displayWeight = forceDecimals
+    ? roundedWeight.toFixed(decimalPlaces)
+    : roundedWeight;
 
   return (
     <span className='weight-string'>
-      {forceDecimals ? roundedWeight.toFixed(decimalPlaces) : roundedWeight}
+      {displayWeight}
       <span
         style={{
           textTransform: 'uppercase',
-          fontSize: '0.7em',
+          fontSize: '0.8em',
           marginLeft: '0.3em',
         }}
       >

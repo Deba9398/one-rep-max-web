@@ -52,11 +52,16 @@ export default function PlateLoader({ weight }: { weight: number }) {
       case 55:
         return 'red';
       case 45:
+      case 5:
         return 'blue';
       case 35:
         return 'yellow';
       case 25:
+      case 2.5:
         return 'green';
+      case 10:
+      case 1.25:
+        return 'white';
       default:
         return '';
     }
@@ -93,7 +98,10 @@ export default function PlateLoader({ weight }: { weight: number }) {
         </div>
         <div className='flex-1'>
           <Title order={4}>Difference</Title>
-          <Text size='lg'>{formatWeight(diff, 1)}</Text>
+          <Text size='lg' c={diff > 0 ? 'red' : 'green'}>
+            {diff > 0 && '+'}
+            {formatWeight(diff, 1)}
+          </Text>
         </div>
       </div>
       <div

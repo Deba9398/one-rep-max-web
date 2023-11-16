@@ -1,4 +1,4 @@
-import { formatWeight } from '@/util/formatter';
+import { FormatWeight, formatWeight } from '@/util/formatter';
 import { calculateMetrics } from '@/util/mathUtils';
 import {
   MultiFormulaRepMaxValues,
@@ -31,7 +31,7 @@ export const RepMaxRow = ({
       <div className='flex-1'>{label}</div>
       <div className='flex-none'>
         <Text size='lg' c={color} fw={500}>
-          {formatWeight(avg)}
+          <FormatWeight weight={avg} decimalPlaces={1} forceDecimals={true} />
         </Text>
       </div>
     </div>

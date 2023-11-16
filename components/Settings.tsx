@@ -56,9 +56,9 @@ export default function Settings() {
           onChange={updateColorScheme}
         >
           <Stack mt='xs'>
-            <Radio value='auto' label='Auto' />
-            <Radio value='light' label='Light' />
-            <Radio value='dark' label='Dark' />
+            <Radio size='md' value='auto' label='Auto' />
+            <Radio size='md' value='light' label='Light' />
+            <Radio size='md' value='dark' label='Dark' />
           </Stack>
         </Radio.Group>
         <Space h='xl' />
@@ -69,8 +69,8 @@ export default function Settings() {
           onChange={updateUnitPreference}
         >
           <Stack mt='xs'>
-            <Radio value='lbs' label='Imperial (lbs)' />
-            <Radio value='kg' label='Metric (kg)' />
+            <Radio size='md' value='lbs' label='Imperial (lbs)' />
+            <Radio size='md' value='kg' label='Metric (kg)' />
           </Stack>
         </Radio.Group>
         <Space h='xl' />
@@ -120,6 +120,7 @@ function AvailableWeights() {
         {plates.map((p) => (
           <Switch
             key={p}
+            size='md'
             value={p.toString()}
             label={formatWeight(p, 2, false)}
           />
