@@ -1,7 +1,7 @@
 'use client';
 import PercentagesTable from '@/components/PercentagesTable';
 import RepMaxTable from '@/components/RepMaxTable';
-import { getWeightUnits } from '@/util/formatter';
+import { getWeightUnits, isMetricWeights } from '@/util/formatter';
 import { calculateRepMaxValues } from '@/util/repMaxFormulas';
 import {
   Box,
@@ -14,10 +14,11 @@ import {
   Title,
 } from '@mantine/core';
 import { useRef, useState } from 'react';
-import PlateLoader from './PlateLoader';
 
 export default function OneRepMaxCalc() {
-  const [weightLifted, setWeightLifted] = useState<number>(135);
+  const [weightLifted, setWeightLifted] = useState<number>(
+    isMetricWeights() ? 80 : 135
+  );
   const [repsPerformed, setRepsPerformed] = useState<number>(8);
 
   const weightLiftedHandlersRef = useRef<NumberInputHandlers>(null);

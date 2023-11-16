@@ -2,9 +2,14 @@
   .plate-loader__bar {
     background: linear-gradient(90deg, #bbb, #eee, #bbb);
     border: 1px solid rgba(0, 0, 0, 0.2);
+
+    [data-mantine-color-scheme='dark'] & {
+      background: linear-gradient(90deg, #777, #aaa, #777);
+    }
   }
 
   .plate-loader__plate {
+    text-transform: uppercase;
     position: relative;
     color: black;
     display: flex;
@@ -56,6 +61,15 @@
         color(#81c784 shade(20%)),
         #81c784,
         color(#81c784 shade(20%))
+      );
+    }
+
+    &.white {
+      background: linear-gradient(
+        90deg,
+        color(#fff shade(20%)),
+        #fff,
+        color(#fff shade(20%))
       );
     }
   }

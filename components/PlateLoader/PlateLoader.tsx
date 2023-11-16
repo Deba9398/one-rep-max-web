@@ -1,12 +1,21 @@
-import { formatWeight } from '@/util/formatter';
+import { FormatWeight, formatWeight, isMetricWeights } from '@/util/formatter';
 import { Title, Text } from '@mantine/core';
 import './PlateLoader.css';
+import { getAvailableWeights } from '../Settings';
+
+function roundWeightToSmallestPlate(weight: number, smallestPlate: number) {
+  return Math.round(weight / smallestPlate) * smallestPlate;
+}
 
 export default function PlateLoader({ weight }: { weight: number }) {
-  const barColor = '#666';
-  const barWeight = 45;
-  const plateWeights = [45, 35, 25, 10, 5, 2.5]; // In pounds
-  let weightToLoad = (weight - barWeight) / 2;
+  const isMetric = isMetricWeights();
+  const barWeight = isMetric ? 20 : 45;
+  const plateWeights = getAvailableWeights();
+  const roundedWeight = roundWeightToSmallestPlate(
+    weight,
+    plateWeights[plateWeights.length - 1]
+  );
+  let weightToLoad = (roundedWeight - barWeight) / 2;
   let platesNeeded: number[] = [];
 
   plateWeights.forEach((plateWeight) => {
@@ -17,15 +26,37 @@ export default function PlateLoader({ weight }: { weight: number }) {
   });
 
   const getColorName = (plate: number) => {
+    if (isMetric) {
+      switch (plate) {
+        case 25:
+        case 2.5:
+          return 'red';
+        case 20:
+        case 2:
+          return 'blue';
+        case 15:
+        case 1.5:
+        case 1.25:
+          return 'yellow';
+        case 10:
+        case 1:
+          return 'green';
+        case 5:
+        case 0.5:
+          return 'white';
+        default:
+          return '';
+      }
+    }
     switch (plate) {
       case 55:
         return 'red';
       case 45:
         return 'blue';
       case 35:
-        return 'yellow'; // 35lb is typically blue
+        return 'yellow';
       case 25:
-        return 'green'; // 25lb is typically green
+        return 'green';
       default:
         return '';
     }
@@ -33,15 +64,20 @@ export default function PlateLoader({ weight }: { weight: number }) {
 
   // Function to determine the size of the plate based on its weight
   const getPlateSizeStyles = (plate: number) => {
-    const baseWidth = 1.5; // Base width for the smallest plate
+    if (isMetric) {
+      const height = plate >= 10 ? ((plate - 10) * 2.2) / 2 + 40 : 30;
+      const width = plate >= 10 ? '100%' : `${6.6 * plate + 25}%`;
+      return { height: `${height}px`, width };
+    }
+
     const height = plate >= 25 ? (plate - 25) / 2 + 40 : 30;
     const width = plate >= 25 ? '100%' : `${3 * plate + 25}%`;
     return { height: `${height}px`, width };
   };
 
   const totalWeight =
-    platesNeeded.reduce((val, current) => val + current, 0) * 2 + 45;
-  const diff = weight - totalWeight;
+    platesNeeded.reduce((val, current) => val + current, 0) * 2 + barWeight;
+  const diff = totalWeight - weight;
 
   return (
     <div className='flex-1 flex flex-col items-center'>
@@ -50,7 +86,8 @@ export default function PlateLoader({ weight }: { weight: number }) {
           <Title order={4}>Closest Barbell Load</Title>
           <Text size='lg'>
             {formatWeight(
-              platesNeeded.reduce((val, current) => val + current, 0) * 2 + 45
+              platesNeeded.reduce((val, current) => val + current, 0) * 2 +
+                barWeight
             )}
           </Text>
         </div>
@@ -91,7 +128,11 @@ export default function PlateLoader({ weight }: { weight: number }) {
                 width,
               }}
             >
-              {plate} lbs
+              <FormatWeight
+                weight={plate}
+                decimalPlaces={2}
+                forceDecimals={false}
+              />
             </div>
           );
         })}

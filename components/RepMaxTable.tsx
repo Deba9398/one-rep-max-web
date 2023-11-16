@@ -51,7 +51,7 @@ export const RepMaxRowContent = ({
     <div>
       <div className='flex pt-4 px-6 text-center'>
         <div className='flex-1'>
-          <Title order={4}>Range</Title>
+          <Title order={4}>Calculation Range</Title>
           <Text size='lg'>
             {formatWeight(
               repMaxCalculation[repMaxCalculation.length - 1].value,
