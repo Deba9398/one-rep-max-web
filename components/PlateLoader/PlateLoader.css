@@ -8,6 +8,14 @@
     }
   }
 
+  .plate-loader__clip-accent {
+    fill: #333;
+
+    [data-mantine-color-scheme='dark'] & {
+      fill: #fff;
+    }
+  }
+
   .plate-loader__plate {
     text-transform: uppercase;
     position: relative;

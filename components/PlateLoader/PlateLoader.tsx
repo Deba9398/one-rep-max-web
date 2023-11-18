@@ -2,20 +2,49 @@ import { FormatWeight, formatWeight, isMetricWeights } from '@/util/formatter';
 import { Title, Text } from '@mantine/core';
 import './PlateLoader.css';
 import { getAvailableWeights } from '../Settings';
+import { SVGProps } from 'react';
 
 function roundWeightToSmallestPlate(weight: number, smallestPlate: number) {
   return Math.round(weight / smallestPlate) * smallestPlate;
 }
 
 export default function PlateLoader({ weight }: { weight: number }) {
-  const isMetric = isMetricWeights();
-  const barWeight = isMetric ? 20 : 45;
   const plateWeights = getAvailableWeights();
   const roundedWeight = roundWeightToSmallestPlate(
     weight,
     plateWeights[plateWeights.length - 1]
   );
-  let weightToLoad = (roundedWeight - barWeight) / 2;
+
+  const diff = roundedWeight - weight;
+
+  return (
+    <div className='flex-1 flex flex-col items-center'>
+      <div className='flex w-full pt-4 px-6 text-center'>
+        <div className='flex-1'>
+          <Title order={4}>Closest Barbell Load</Title>
+          <Text size='lg'>{formatWeight(roundedWeight)}</Text>
+        </div>
+        <div className='flex-1'>
+          <Title order={4}>Difference</Title>
+          <Text size='lg' c={diff > 0 ? 'red' : 'green'}>
+            {diff > 0 && '+'}
+            {formatWeight(diff, 1)}
+          </Text>
+        </div>
+      </div>
+      <div>
+        <LoadedBarbellVisual weight={roundedWeight} />
+      </div>
+    </div>
+  );
+}
+
+function LoadedBarbellVisual({ weight }: { weight: number }) {
+  const isMetric = isMetricWeights();
+  const barWeight = isMetric ? 20 : 45;
+  const plateWeights = getAvailableWeights();
+
+  let weightToLoad = (weight - barWeight) / 2;
   let platesNeeded: number[] = [];
 
   plateWeights.forEach((plateWeight) => {
@@ -80,87 +109,95 @@ export default function PlateLoader({ weight }: { weight: number }) {
     return { height: `${height}px`, width };
   };
 
-  const totalWeight =
-    platesNeeded.reduce((val, current) => val + current, 0) * 2 + barWeight;
-  const diff = totalWeight - weight;
-
   return (
-    <div className='flex-1 flex flex-col items-center'>
-      <div className='flex w-full pt-4 px-6 text-center'>
-        <div className='flex-1'>
-          <Title order={4}>Closest Barbell Load</Title>
-          <Text size='lg'>
-            {formatWeight(
-              platesNeeded.reduce((val, current) => val + current, 0) * 2 +
-                barWeight
-            )}
-          </Text>
-        </div>
-        <div className='flex-1'>
-          <Title order={4}>Difference</Title>
-          <Text size='lg' c={diff > 0 ? 'red' : 'green'}>
-            {diff > 0 && '+'}
-            {formatWeight(diff, 1)}
-          </Text>
-        </div>
-      </div>
+    <div
+      className='plate-loader'
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: '20px',
+        width: '300px',
+      }}
+    >
       <div
-        className='plate-loader'
+        className='plate-loader__bar'
         style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: '20px',
-          width: '300px',
+          height: '50px',
+          width: '30px',
+          borderTopLeftRadius: '4px',
+          borderTopRightRadius: '4px',
         }}
-      >
-        <div
-          className='plate-loader__bar'
-          style={{
-            height: '50px',
-            width: '30px',
-            borderTopLeftRadius: '4px',
-            borderTopRightRadius: '4px',
-          }}
-        ></div>
-        {/* Plates */}
-        {platesNeeded.reverse().map((plate, index) => {
-          const { height, width } = getPlateSizeStyles(plate);
-          return (
-            <div
-              key={index}
-              className={`plate-loader__plate ${getColorName(plate)}`}
-              style={{
-                height,
-                width,
-              }}
-            >
-              <FormatWeight
-                weight={plate}
-                decimalPlaces={2}
-                forceDecimals={false}
-              />
-            </div>
-          );
-        })}
-        <div
-          className='plate-loader__bar'
-          style={{
-            height: '15px',
-            width: '50px',
-            borderRadius: '2px',
-          }}
-        ></div>
-        <div
-          className='plate-loader__bar'
-          style={{
-            height: '50px',
-            width: '20px',
-            borderBottom: 'none',
-          }}
-        ></div>
-      </div>
+      ></div>
+      {/* Plates */}
+      {platesNeeded.reverse().map((plate, index) => {
+        const { height, width } = getPlateSizeStyles(plate);
+        return (
+          <div
+            key={index}
+            className={`plate-loader__plate ${getColorName(plate)}`}
+            style={{
+              height,
+              width,
+            }}
+          >
+            <FormatWeight
+              weight={plate}
+              decimalPlaces={2}
+              forceDecimals={false}
+            />
+          </div>
+        );
+      })}
+      <div
+        className='plate-loader__bar'
+        style={{
+          height: '15px',
+          width: '50px',
+          borderRadius: '2px',
+        }}
+      ></div>
+      <div
+        className='plate-loader__bar'
+        style={{
+          height: '50px',
+          width: '20px',
+          borderBottom: 'none',
+        }}
+      ></div>
     </div>
   );
 }
+
+const BarbellClip = (props?: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns='http://www.w3.org/2000/svg'
+    width={40}
+    height={22}
+    fill='none'
+    {...props}
+  >
+    <g clipPath='url(#a)'>
+      <path
+        className='plate-loader__clip-accent'
+        fill='#333'
+        d='M0 3a3 3 0 0 1 3-3h34a3 3 0 0 1 3 3v16a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V3Z'
+      />
+      <rect width={14} height={16} x={18} y={3} fill='#fff' rx={1} />
+      <path
+        className='plate-loader__clip-accent'
+        fill='#333'
+        d='M28 5h1v12h-1zM25 5h1v12h-1zM22 5h1v12h-1z'
+      />
+      <rect width={9} height={4} x={11} y={4} fill='#fff' rx={1} />
+      <rect width={11} height={4} x={5} y={9} fill='#fff' rx={1} />
+      <rect width={9} height={4} x={11} y={14} fill='#fff' rx={1} />
+    </g>
+    <defs>
+      <clipPath id='a'>
+        <path fill='#fff' d='M0 0h40v22H0z' />
+      </clipPath>
+    </defs>
+  </svg>
+);
