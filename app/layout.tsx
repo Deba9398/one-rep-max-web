@@ -9,7 +9,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 export const metadata: Metadata = {
   title: 'One Rep Max Calculator',
   description:
-    'A 1 rep max calculator is a tool that estimates the maximum weight a person can lift in a single repetition of an exercise based on their performance with lighter weights for multiple repetitions.',
+    'Calculate your one rep max, get percentage breakdowns, and visualize barbell plate configurations with this free web app.',
 };
 
 export default function RootLayout({

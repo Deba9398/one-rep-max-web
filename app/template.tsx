@@ -33,7 +33,7 @@ const resolver: CSSVariablesResolver = (theme) => ({
 });
 
 const themeOverrides: MantineThemeOverride = {
-  primaryShade: { light: 7, dark: 4 },
+  primaryShade: { light: 9, dark: 4 },
   headings: {
     fontWeight: '500',
   },
@@ -58,32 +58,25 @@ export default function Template({ children }: { children: React.ReactNode }) {
         padding='md'
       >
         <AppShell.Header>
-          <Group h='100%' w='100%'>
-            <div className='flex flex-1 items-center'>
-              <div className='flex-1'>
-                <Group h='100%' w='100%' px='md'>
-                  <Burger
-                    opened={opened}
-                    onClick={toggle}
-                    hiddenFrom='sm'
-                    size='sm'
-                  />
-                  <Image
-                    src='/logo.png'
-                    alt='1RM Calc Logo'
-                    width={36}
-                    height={36}
-                    priority
-                  />
-                  <Title order={3} className='pb-4 pt-4 text-center'>
-                    1 Rep Max Calculator
-                  </Title>
-                </Group>
-              </div>
-              <div className='px-2'>
-                <ColorSchemeToggle />
-              </div>
-            </div>
+          <Group h='100%' w='100%' px='md'>
+            <Burger
+              opened={opened}
+              onClick={toggle}
+              aria-label='Menu'
+              hiddenFrom='sm'
+              size='sm'
+            />
+            <Image
+              src='/logo.png'
+              alt='1RM Calc Logo'
+              width={36}
+              height={36}
+              priority
+            />
+            <Title order={3} className='truncate flex-1'>
+              1 Rep Max Calculator
+            </Title>
+            <ColorSchemeToggle />
           </Group>
         </AppShell.Header>
 
@@ -111,6 +104,9 @@ function ColorSchemeToggle() {
       variant='default'
       px={16}
       size='lg'
+      aria-label={
+        computedColorScheme === 'light' ? 'Use Dark Mode' : 'Use Light Mode'
+      }
       onClick={() =>
         setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')
       }

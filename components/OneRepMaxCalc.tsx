@@ -1,7 +1,7 @@
 'use client';
 import PercentagesTable from '@/components/PercentagesTable';
 import RepMaxTable from '@/components/RepMaxTable';
-import { getWeightUnits } from '@/util/formatter';
+import { getWeightUnits, isMetricWeights } from '@/util/formatter';
 import { calculateRepMaxValues } from '@/util/repMaxFormulas';
 import {
   Box,
@@ -16,7 +16,9 @@ import {
 import { useRef, useState } from 'react';
 
 export default function OneRepMaxCalc() {
-  const [weightLifted, setWeightLifted] = useState<number>(135);
+  const [weightLifted, setWeightLifted] = useState<number>(
+    isMetricWeights() ? 80 : 135
+  );
   const [repsPerformed, setRepsPerformed] = useState<number>(8);
 
   const weightLiftedHandlersRef = useRef<NumberInputHandlers>(null);
@@ -40,7 +42,7 @@ export default function OneRepMaxCalc() {
       <Box maw={600} mx='auto'>
         <Card padding='xl' radius='lg' withBorder>
           <div className='text-center'>
-            <Title order={4} pb={8}>
+            <Title id='weightInputLabel' order={4} pb={8}>
               Weight ({getWeightUnits()})
             </Title>
             <Group gap={0}>
@@ -56,6 +58,7 @@ export default function OneRepMaxCalc() {
                 size='xl'
                 allowNegative={false}
                 inputMode='decimal'
+                aria-labelledby='weightInputLabel'
                 min={0}
                 max={1000}
                 step={5}
@@ -85,7 +88,7 @@ export default function OneRepMaxCalc() {
 
           <Space h={12} />
           <div className='text-center'>
-            <Title order={4} pb={8}>
+            <Title id='repsInputLabel' order={4} pb={8}>
               Reps
             </Title>
             <Group gap={0}>
@@ -102,6 +105,7 @@ export default function OneRepMaxCalc() {
                 inputMode='decimal'
                 clampBehavior='strict'
                 allowNegative={false}
+                aria-labelledby='repsInputLabel'
                 min={1}
                 max={15}
                 radius='xl'
@@ -129,6 +133,8 @@ export default function OneRepMaxCalc() {
           <Space h={12} />
         </Card>
       </Box>
+      {/* 
+      <PlateLoader weight={repMaxValues[1][0].value} /> */}
 
       <div className='container mx-auto mt-8'>
         <div className='flex flex-col items-center justify-center xl:flex-row xl:items-start -mx-2 lg:-mx-0'>

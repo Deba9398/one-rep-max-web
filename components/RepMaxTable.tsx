@@ -1,4 +1,4 @@
-import { formatWeight } from '@/util/formatter';
+import { FormatWeight, formatWeight } from '@/util/formatter';
 import { calculateMetrics } from '@/util/mathUtils';
 import {
   MultiFormulaRepMaxValues,
@@ -13,6 +13,7 @@ import {
   Table,
   Divider,
 } from '@mantine/core';
+import PlateLoader from './PlateLoader';
 
 export const RepMaxRow = ({
   label,
@@ -30,7 +31,7 @@ export const RepMaxRow = ({
       <div className='flex-1'>{label}</div>
       <div className='flex-none'>
         <Text size='lg' c={color} fw={500}>
-          {formatWeight(avg)}
+          <FormatWeight weight={avg} decimalPlaces={1} forceDecimals={true} />
         </Text>
       </div>
     </div>
@@ -42,7 +43,7 @@ export const RepMaxRowContent = ({
 }: {
   repMaxCalculation: RepMaxValueType[];
 }) => {
-  const { color, stdDeviation, percentDeviation } = calculateMetrics(
+  const { avg, color, stdDeviation, percentDeviation } = calculateMetrics(
     repMaxCalculation.map((c) => c.value)
   );
 
@@ -50,7 +51,7 @@ export const RepMaxRowContent = ({
     <div>
       <div className='flex pt-4 px-6 text-center'>
         <div className='flex-1'>
-          <Title order={4}>Range</Title>
+          <Title order={4}>Calculation Range</Title>
           <Text size='lg'>
             {formatWeight(
               repMaxCalculation[repMaxCalculation.length - 1].value,
@@ -67,6 +68,11 @@ export const RepMaxRowContent = ({
         </div>
       </div>
       <Space h='lg' />
+      <div className='flex justify-center'>
+        <PlateLoader weight={avg} />
+      </div>
+      <Divider />
+
       <Table striped highlightOnHover horizontalSpacing='md'>
         <Table.Thead>
           <Table.Tr>
