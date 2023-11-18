@@ -42,7 +42,7 @@ export default function OneRepMaxCalc() {
       <Box maw={600} mx='auto'>
         <Card padding='xl' radius='lg' withBorder>
           <div className='text-center'>
-            <Title order={4} pb={8}>
+            <Title id='weightInputLabel' order={4} pb={8}>
               Weight ({getWeightUnits()})
             </Title>
             <Group gap={0}>
@@ -58,6 +58,7 @@ export default function OneRepMaxCalc() {
                 size='xl'
                 allowNegative={false}
                 inputMode='decimal'
+                aria-labelledby='weightInputLabel'
                 min={0}
                 max={1000}
                 step={5}
@@ -87,7 +88,7 @@ export default function OneRepMaxCalc() {
 
           <Space h={12} />
           <div className='text-center'>
-            <Title order={4} pb={8}>
+            <Title id='repsInputLabel' order={4} pb={8}>
               Reps
             </Title>
             <Group gap={0}>
@@ -104,6 +105,7 @@ export default function OneRepMaxCalc() {
                 inputMode='decimal'
                 clampBehavior='strict'
                 allowNegative={false}
+                aria-labelledby='repsInputLabel'
                 min={1}
                 max={15}
                 radius='xl'

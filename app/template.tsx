@@ -33,7 +33,7 @@ const resolver: CSSVariablesResolver = (theme) => ({
 });
 
 const themeOverrides: MantineThemeOverride = {
-  primaryShade: { light: 7, dark: 4 },
+  primaryShade: { light: 9, dark: 4 },
   headings: {
     fontWeight: '500',
   },
@@ -62,6 +62,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
             <Burger
               opened={opened}
               onClick={toggle}
+              aria-label='Menu'
               hiddenFrom='sm'
               size='sm'
             />
@@ -103,6 +104,9 @@ function ColorSchemeToggle() {
       variant='default'
       px={16}
       size='lg'
+      aria-label={
+        computedColorScheme === 'light' ? 'Use Dark Mode' : 'Use Light Mode'
+      }
       onClick={() =>
         setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')
       }
