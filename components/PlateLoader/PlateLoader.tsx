@@ -5,14 +5,14 @@ import { getAvailableWeights } from '../Settings';
 import { SVGProps } from 'react';
 
 function roundWeightToSmallestPlate(weight: number, smallestPlate: number) {
-  return Math.round(weight / smallestPlate) * smallestPlate;
+  return Math.floor(weight / smallestPlate) * smallestPlate;
 }
 
 export default function PlateLoader({ weight }: { weight: number }) {
   const plateWeights = getAvailableWeights();
   const roundedWeight = roundWeightToSmallestPlate(
     weight,
-    plateWeights[plateWeights.length - 1]
+    plateWeights[plateWeights.length - 1] * 2
   );
 
   const diff = roundedWeight - weight;
@@ -22,7 +22,7 @@ export default function PlateLoader({ weight }: { weight: number }) {
       <div className='flex w-full pt-4 px-6 text-center'>
         <div className='flex-1'>
           <Title order={4}>Closest Barbell Load</Title>
-          <Text size='lg'>{formatWeight(roundedWeight)}</Text>
+          <Text size='lg'>{formatWeight(roundedWeight, 1)}</Text>
         </div>
         <div className='flex-1'>
           <Title order={4}>Difference</Title>
