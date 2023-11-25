@@ -4,15 +4,33 @@ import './PlateLoader.css';
 import { getAvailableWeights } from '../Settings';
 import { SVGProps } from 'react';
 
-function roundWeightToSmallestPlate(weight: number, smallestPlate: number) {
-  return Math.floor(weight / smallestPlate) * smallestPlate;
+function roundWeightToSmallestPlate(
+  weight: number,
+  smallestPlate: number,
+  rounding: 'floor' | 'closest'
+) {
+  const barWeight = getBarWeight();
+  const remainingWeight = weight - barWeight;
+  const smallestIncrement = smallestPlate * 2;
+
+  const mathFunc = rounding === 'closest' ? Math.round : Math.floor;
+  const plateWeights =
+    mathFunc(remainingWeight / smallestIncrement) * smallestIncrement;
+
+  return plateWeights + barWeight;
 }
+
+const getBarWeight = () => {
+  const isMetric = isMetricWeights();
+  return isMetric ? 20 : 45;
+};
 
 export default function PlateLoader({ weight }: { weight: number }) {
   const plateWeights = getAvailableWeights();
   const roundedWeight = roundWeightToSmallestPlate(
     weight,
-    plateWeights[plateWeights.length - 1] * 2
+    plateWeights[plateWeights.length - 1],
+    'floor'
   );
 
   const diff = roundedWeight - weight;
