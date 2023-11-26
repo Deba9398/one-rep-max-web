@@ -10,6 +10,11 @@ function roundWeightToSmallestPlate(
   rounding: 'floor' | 'closest'
 ) {
   const barWeight = getBarWeight();
+
+  if (weight <= barWeight) {
+    return barWeight;
+  }
+
   const remainingWeight = weight - barWeight;
   const smallestIncrement = smallestPlate * 2;
 
