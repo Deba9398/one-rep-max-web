@@ -1,23 +1,30 @@
 import { FormatWeight, formatWeight, isMetricWeights } from '@/util/formatter';
-import { Title, Text } from '@mantine/core';
+import { Title, Text, Button, Alert } from '@mantine/core';
 import './PlateLoader.css';
 import { getAvailableWeights } from '../Settings';
-import { SVGProps } from 'react';
+import { SVGProps, useCallback, useEffect, useState } from 'react';
+import {
+  IconAlertTriangleFilled,
+  IconMinus,
+  IconPlus,
+} from '@tabler/icons-react';
 
 function roundWeightToSmallestPlate(
   weight: number,
   smallestPlate: number,
-  rounding: 'floor' | 'closest'
+  rounding: 'floor' | 'closest',
+  weightAdjustment: number
 ) {
   const barWeight = getBarWeight();
+  const smallestIncrement = smallestPlate * 2;
+
+  weight += smallestIncrement * weightAdjustment;
 
   if (weight <= barWeight) {
     return barWeight;
   }
 
   const remainingWeight = weight - barWeight;
-  const smallestIncrement = smallestPlate * 2;
-
   const mathFunc = rounding === 'closest' ? Math.round : Math.floor;
   const plateWeights =
     mathFunc(remainingWeight / smallestIncrement) * smallestIncrement;
@@ -31,11 +38,24 @@ const getBarWeight = () => {
 };
 
 export default function PlateLoader({ weight }: { weight: number }) {
+  const [weightAdjustment, setWeightAdjustment] = useState<number>(0);
   const plateWeights = getAvailableWeights();
   const roundedWeight = roundWeightToSmallestPlate(
     weight,
     plateWeights[plateWeights.length - 1],
-    'floor'
+    'floor',
+    weightAdjustment
+  );
+
+  useEffect(() => {
+    setWeightAdjustment(0);
+  }, [weight]);
+
+  const weightAdjustmentCallback = useCallback(
+    (adjustment: number) => {
+      setWeightAdjustment(weightAdjustment + adjustment);
+    },
+    [weightAdjustment]
   );
 
   const diff = roundedWeight - weight;
@@ -44,25 +64,51 @@ export default function PlateLoader({ weight }: { weight: number }) {
     <div className='flex-1 flex flex-col items-center'>
       <div className='flex w-full pt-4 px-6 text-center'>
         <div className='flex-1'>
-          <Title order={4}>Closest Barbell Load</Title>
+          <Title order={4}>Barbell Load</Title>
           <Text size='lg'>{formatWeight(roundedWeight, 1)}</Text>
         </div>
         <div className='flex-1'>
           <Title order={4}>Difference</Title>
           <Text size='lg' c={diff > 0 ? 'red' : 'green'}>
-            {diff > 0 && '+'}
-            {formatWeight(diff, 1)}
+            <span className='flex items-center justify-center'>
+              {diff > 0 && <IconAlertTriangleFilled size='1em' />}
+              {diff > 0 && '+'}
+              {formatWeight(diff, 1)}
+            </span>
           </Text>
         </div>
       </div>
+      {diff > 0 && (
+        <div className='flex w-full pt-4 px-6'>
+          <Alert
+            variant='light'
+            color='red'
+            title='Warning'
+            w='100%'
+            icon={<IconAlertTriangleFilled size='1em' />}
+          >
+            This barbell load is {formatWeight(diff, 1)} heavier than your
+            predicted rep max.
+          </Alert>
+        </div>
+      )}
       <div>
-        <LoadedBarbellVisual weight={roundedWeight} />
+        <LoadedBarbellVisual
+          weight={roundedWeight}
+          weightAdjustmentCallback={weightAdjustmentCallback}
+        />
       </div>
     </div>
   );
 }
 
-function LoadedBarbellVisual({ weight }: { weight: number }) {
+function LoadedBarbellVisual({
+  weight,
+  weightAdjustmentCallback,
+}: {
+  weight: number;
+  weightAdjustmentCallback: (weight: number) => void;
+}) {
   const isMetric = isMetricWeights();
   const barWeight = isMetric ? 20 : 45;
   const plateWeights = getAvailableWeights();
@@ -181,14 +227,22 @@ function LoadedBarbellVisual({ weight }: { weight: number }) {
           borderRadius: '2px',
         }}
       ></div>
-      <div
-        className='plate-loader__bar'
-        style={{
-          height: '50px',
-          width: '20px',
-          borderBottom: 'none',
-        }}
-      ></div>
+      <div className='flex items-center gap-4'>
+        <Button variant='subtle' onClick={() => weightAdjustmentCallback(-1)}>
+          <IconMinus size='1rem' />
+        </Button>
+        <div
+          className='plate-loader__bar'
+          style={{
+            height: '50px',
+            width: '20px',
+            borderBottom: 'none',
+          }}
+        ></div>
+        <Button variant='subtle' onClick={() => weightAdjustmentCallback(1)}>
+          <IconPlus size='1rem' />
+        </Button>
+      </div>
     </div>
   );
 }

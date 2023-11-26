@@ -13,6 +13,7 @@ import {
   Space,
   Title,
 } from '@mantine/core';
+import { IconMinus, IconPlus } from '@tabler/icons-react';
 import { useRef, useState } from 'react';
 
 export default function OneRepMaxCalc() {
@@ -51,7 +52,7 @@ export default function OneRepMaxCalc() {
                 disabled={weightLifted <= 0}
                 onClick={() => weightLiftedHandlersRef.current?.decrement()}
               >
-                -
+                <IconMinus size='1rem' />
               </Button>
               <NumberInput
                 className='text-center flex-1 px-4'
@@ -81,7 +82,7 @@ export default function OneRepMaxCalc() {
                 disabled={weightLifted >= 1000}
                 onClick={() => weightLiftedHandlersRef.current?.increment()}
               >
-                +
+                <IconPlus size='1rem' />
               </Button>
             </Group>
           </div>
@@ -97,7 +98,7 @@ export default function OneRepMaxCalc() {
                 disabled={repsPerformed <= 1}
                 onClick={() => repsPerformedHandlersRef.current?.decrement()}
               >
-                -
+                <IconMinus size='1rem' />
               </Button>
               <NumberInput
                 className='text-center flex-1 px-4'
@@ -126,7 +127,7 @@ export default function OneRepMaxCalc() {
                 disabled={repsPerformed >= 15}
                 onClick={() => repsPerformedHandlersRef.current?.increment()}
               >
-                +
+                <IconPlus size='1rem' />
               </Button>
             </Group>
           </div>
