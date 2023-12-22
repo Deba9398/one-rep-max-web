@@ -4,19 +4,25 @@ import RepMaxTable from '@/components/RepMaxTable';
 import { getWeightUnits, isMetricWeights } from '@/util/formatter';
 import { calculateRepMaxValues } from '@/util/repMaxFormulas';
 import {
+  Anchor,
   Box,
   Button,
   Card,
   Group,
+  Modal,
   NumberInput,
   NumberInputHandlers,
   Space,
   Title,
 } from '@mantine/core';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
 import { useRef, useState } from 'react';
+import Help from './Help';
 
 export default function OneRepMaxCalc() {
+  const [opened, { open, close }] = useDisclosure(false);
+  const isMobile = useMediaQuery('(max-width: 50em)');
   const [weightLifted, setWeightLifted] = useState<number>(
     isMetricWeights() ? 80 : 135
   );
@@ -131,11 +137,14 @@ export default function OneRepMaxCalc() {
               </Button>
             </Group>
           </div>
-          <Space h={12} />
+          <Space h={24} />
+          <span className='text-center'>
+            <Anchor onClick={open} component='button' c='dimmed' size='sm'>
+              Not sure what to do here? View the help content.
+            </Anchor>
+          </span>
         </Card>
       </Box>
-      {/* 
-      <PlateLoader weight={repMaxValues[1][0].value} /> */}
 
       <div className='container mx-auto mt-8'>
         <div className='flex flex-col items-center justify-center xl:flex-row xl:items-start -mx-2 lg:-mx-0'>
@@ -153,6 +162,15 @@ export default function OneRepMaxCalc() {
           </div>
         </div>
       </div>
+      <Modal
+        opened={opened}
+        size='xl'
+        fullScreen={isMobile}
+        onClose={close}
+        title='Help'
+      >
+        <Help />
+      </Modal>
     </main>
   );
 }
