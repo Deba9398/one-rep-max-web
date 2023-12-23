@@ -1,6 +1,6 @@
 import { isMetricWeights } from '@/util/formatter';
 import PlateLoader from './PlateLoader';
-import { Title, Text, Space } from '@mantine/core';
+import { Title, Text, Space, Anchor } from '@mantine/core';
 
 export default function Help() {
   return (
@@ -14,9 +14,9 @@ export default function Help() {
         percentages of your 1 rep max required by many training programs. Any
         lift can be used from olympic lifts like Bench Press, Squat, and
         Deadlift to isolation lifts like bicep curls. This calculator uses many{' '}
-        <a href='https://en.wikipedia.org/wiki/One-repetition_maximum'>
+        <Anchor href='https://en.wikipedia.org/wiki/One-repetition_maximum'>
           well known formulas
-        </a>{' '}
+        </Anchor>{' '}
         to calculate these estimates. Here&apos;s how to use it:
       </p>
       <ol>
@@ -48,7 +48,7 @@ export default function Help() {
       </p>
       <p>
         Is the loader showing a plate you don&apos;t have? No problem, pick your
-        available plates on the <a href='/settings'>Settings page</a>.
+        available plates on the <Anchor href='/settings'>Settings page</Anchor>.
       </p>
       <p>
         The plate loader shows the <span className='font-bold'>difference</span>{' '}
