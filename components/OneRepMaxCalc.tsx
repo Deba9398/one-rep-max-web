@@ -9,20 +9,18 @@ import {
   Button,
   Card,
   Group,
-  Modal,
   NumberInput,
   NumberInputHandlers,
   Space,
   Title,
 } from '@mantine/core';
-import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { useDisclosure } from '@mantine/hooks';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
 import { useRef, useState } from 'react';
 import Help from './Help';
 
 export default function OneRepMaxCalc() {
   const [opened, { open, close }] = useDisclosure(false);
-  const isMobile = useMediaQuery('(max-width: 50em)');
   const [weightLifted, setWeightLifted] = useState<number>(
     isMetricWeights() ? 80 : 135
   );
@@ -166,15 +164,7 @@ export default function OneRepMaxCalc() {
           </div>
         </div>
       </div>
-      <Modal
-        opened={opened}
-        size='xl'
-        fullScreen={isMobile}
-        onClose={close}
-        title='Help'
-      >
-        <Help />
-      </Modal>
+      <Help opened={opened} close={close} />
     </main>
   );
 }

@@ -1,10 +1,25 @@
 import { isMetricWeights } from '@/util/formatter';
 import PlateLoader from './PlateLoader';
-import { Title, Text, Space, Anchor } from '@mantine/core';
+import { Title, Text, Space, Anchor, Modal } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 
-export default function Help() {
+export default function Help({
+  opened,
+  close,
+}: {
+  opened: boolean;
+  close: () => void;
+}) {
+  const isMobile = useMediaQuery('(max-width: 50em)');
+
   return (
-    <>
+    <Modal
+      opened={opened}
+      size='xl'
+      fullScreen={isMobile}
+      onClose={close}
+      title='Help'
+    >
       <Title order={4} className=' text-center'>
         Calculator
       </Title>
@@ -91,6 +106,6 @@ export default function Help() {
           </Text>
         </li>
       </ul>
-    </>
+    </Modal>
   );
 }
