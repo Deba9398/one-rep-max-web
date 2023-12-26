@@ -3,7 +3,12 @@ const nextConfig = {
   output: 'export',
   images: { unoptimized: true },
   experimental: {
-    optimizePackageImports: ['@mantine/core', '@mantine/hooks'],
+    optimizeCss: true,
+    optimizePackageImports: [
+      '@mantine/core',
+      '@mantine/hooks',
+      '@tabler/icons-react',
+    ],
   },
 };
 
