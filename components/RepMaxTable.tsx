@@ -14,6 +14,7 @@ import {
   Divider,
 } from '@mantine/core';
 import PlateLoader from './PlateLoader';
+import { useAccordionState } from '@/util/hooks';
 
 export const RepMaxRow = ({
   label,
@@ -100,9 +101,15 @@ export default function RepMaxTable({
 }: {
   repMaxValues: MultiFormulaRepMaxValues;
 }) {
+  const [openPanels, onAccordionStateChange] = useAccordionState();
+
   return (
     <Card padding={0} radius='lg' withBorder>
-      <Accordion chevronPosition='left' multiple>
+      <Accordion
+        onChange={onAccordionStateChange}
+        chevronPosition='left'
+        multiple
+      >
         {Object.keys(repMaxValues).map((key) => (
           <Accordion.Item key={key} value={key}>
             <Accordion.Control>
@@ -118,7 +125,9 @@ export default function RepMaxTable({
                 },
               }}
             >
-              <RepMaxRowContent repMaxCalculation={repMaxValues[key]} />
+              {openPanels.includes(key) ? (
+                <RepMaxRowContent repMaxCalculation={repMaxValues[key]} />
+              ) : null}
             </Accordion.Panel>
           </Accordion.Item>
         ))}

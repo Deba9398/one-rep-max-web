@@ -1,6 +1,8 @@
 import { MultiFormulaRepMaxValues } from '@/util/repMaxFormulas';
-import { Accordion, Card } from '@mantine/core';
+import { Accordion, AccordionValue, Card } from '@mantine/core';
 import { RepMaxRow, RepMaxRowContent } from './RepMaxTable';
+import { useState } from 'react';
+import { useAccordionState } from '@/util/hooks';
 
 export default function PercentagesTable({
   repMaxValues,
@@ -8,10 +10,15 @@ export default function PercentagesTable({
   repMaxValues: MultiFormulaRepMaxValues;
 }) {
   const percentages = [100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 40];
+  const [openPanels, onAccordionStateChange] = useAccordionState();
 
   return (
     <Card padding={0} radius='lg' withBorder>
-      <Accordion chevronPosition='left' multiple>
+      <Accordion
+        onChange={onAccordionStateChange}
+        chevronPosition='left'
+        multiple
+      >
         {percentages.map((p) => {
           const values = repMaxValues[1].map((r) => ({
             formula: r.formula,
@@ -29,7 +36,9 @@ export default function PercentagesTable({
                   },
                 }}
               >
-                <RepMaxRowContent repMaxCalculation={values} />
+                {openPanels.includes(p.toString()) ? (
+                  <RepMaxRowContent repMaxCalculation={values} />
+                ) : null}
               </Accordion.Panel>
             </Accordion.Item>
           );
