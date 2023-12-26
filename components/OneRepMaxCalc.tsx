@@ -57,6 +57,7 @@ export default function OneRepMaxCalc() {
                 {...numberButtonProps}
                 disabled={weightLifted <= 0}
                 onClick={() => weightLiftedHandlersRef.current?.decrement()}
+                aria-label='Decrement Weight'
               >
                 <IconMinus size='1rem' />
               </Button>
@@ -87,6 +88,7 @@ export default function OneRepMaxCalc() {
                 {...numberButtonProps}
                 disabled={weightLifted >= 1000}
                 onClick={() => weightLiftedHandlersRef.current?.increment()}
+                aria-label='Increment Weight'
               >
                 <IconPlus size='1rem' />
               </Button>
@@ -103,6 +105,7 @@ export default function OneRepMaxCalc() {
                 {...numberButtonProps}
                 disabled={repsPerformed <= 1}
                 onClick={() => repsPerformedHandlersRef.current?.decrement()}
+                aria-label='Decrement Reps'
               >
                 <IconMinus size='1rem' />
               </Button>
@@ -132,6 +135,7 @@ export default function OneRepMaxCalc() {
                 {...numberButtonProps}
                 disabled={repsPerformed >= 15}
                 onClick={() => repsPerformedHandlersRef.current?.increment()}
+                aria-label='Increment Reps'
               >
                 <IconPlus size='1rem' />
               </Button>
