@@ -37,7 +37,10 @@ function GoogleAnalytics() {
 
   return (
     <>
-      <Script src='https://www.googletagmanager.com/gtag/js?id=G-TS8S6LZJLM' />
+      <Script
+        async
+        src='https://www.googletagmanager.com/gtag/js?id=G-TS8S6LZJLM'
+      />
       <Script id='google-analytics'>
         {`
             window.dataLayer = window.dataLayer || [];
