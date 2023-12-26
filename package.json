@@ -13,7 +13,6 @@
     "@mantine/hooks": "^7.2.1",
     "@tabler/icons-react": "^2.40.0",
     "next": "14.0.2",
-    "postcss-color-function": "^4.1.0",
     "react": "^18",
     "react-dom": "^18"
   },
@@ -28,6 +27,7 @@
     "eslint-config-next": "14.0.2",
     "eslint-config-prettier": "^9.0.0",
     "postcss": "^8.4.31",
+    "postcss-color-function": "^4.1.0",
     "postcss-preset-mantine": "^1.11.0",
     "postcss-simple-vars": "^7.0.1",
     "tailwindcss": "^3.3.0",
