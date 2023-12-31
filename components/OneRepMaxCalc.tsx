@@ -18,6 +18,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
 import { useRef, useState } from 'react';
 import Help from './Help';
+import { LogEvent } from '@/util/analytics';
 
 export default function OneRepMaxCalc() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -54,7 +55,10 @@ export default function OneRepMaxCalc() {
               <Button
                 {...numberButtonProps}
                 disabled={weightLifted <= 0}
-                onClick={() => weightLiftedHandlersRef.current?.decrement()}
+                onClick={() => {
+                  weightLiftedHandlersRef.current?.decrement();
+                  LogEvent('click_decrement_weight');
+                }}
                 aria-label='Decrement Weight'
               >
                 <IconMinus size='1rem' />
@@ -72,7 +76,10 @@ export default function OneRepMaxCalc() {
                 width={'100%'}
                 ref={weightLiftedInputRef}
                 handlersRef={weightLiftedHandlersRef}
-                onChange={(val) => setWeightLifted(parseFloat(val.toString()))}
+                onChange={(val) => {
+                  setWeightLifted(parseFloat(val.toString()));
+                  LogEvent('change_weight_lifted');
+                }}
                 onFocus={() => weightLiftedInputRef.current?.select()}
                 value={weightLifted}
                 hideControls
@@ -85,7 +92,10 @@ export default function OneRepMaxCalc() {
               <Button
                 {...numberButtonProps}
                 disabled={weightLifted >= 1000}
-                onClick={() => weightLiftedHandlersRef.current?.increment()}
+                onClick={() => {
+                  weightLiftedHandlersRef.current?.increment();
+                  LogEvent('click_increment_weight');
+                }}
                 aria-label='Increment Weight'
               >
                 <IconPlus size='1rem' />
@@ -102,7 +112,10 @@ export default function OneRepMaxCalc() {
               <Button
                 {...numberButtonProps}
                 disabled={repsPerformed <= 1}
-                onClick={() => repsPerformedHandlersRef.current?.decrement()}
+                onClick={() => {
+                  repsPerformedHandlersRef.current?.decrement();
+                  LogEvent('click_decrement_reps');
+                }}
                 aria-label='Decrement Reps'
               >
                 <IconMinus size='1rem' />
@@ -119,7 +132,10 @@ export default function OneRepMaxCalc() {
                 radius='xl'
                 ref={repsPerformedInputRef}
                 handlersRef={repsPerformedHandlersRef}
-                onChange={(val) => setRepsPerformed(parseFloat(val.toString()))}
+                onChange={(val) => {
+                  setRepsPerformed(parseFloat(val.toString()));
+                  LogEvent('change_reps_performed');
+                }}
                 onFocus={() => repsPerformedInputRef.current?.select()}
                 value={repsPerformed}
                 hideControls
@@ -132,7 +148,10 @@ export default function OneRepMaxCalc() {
               <Button
                 {...numberButtonProps}
                 disabled={repsPerformed >= 15}
-                onClick={() => repsPerformedHandlersRef.current?.increment()}
+                onClick={() => {
+                  repsPerformedHandlersRef.current?.increment();
+                  LogEvent('click_increment_reps');
+                }}
                 aria-label='Increment Reps'
               >
                 <IconPlus size='1rem' />

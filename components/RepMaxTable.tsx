@@ -101,7 +101,7 @@ export default function RepMaxTable({
 }: {
   repMaxValues: MultiFormulaRepMaxValues;
 }) {
-  const [openPanels, onAccordionStateChange] = useAccordionState();
+  const [openPanels, onAccordionStateChange] = useAccordionState('repmax');
 
   return (
     <Card padding={0} radius='lg' withBorder>
