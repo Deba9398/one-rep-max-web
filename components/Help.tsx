@@ -3,29 +3,15 @@ import PlateLoader from './PlateLoader';
 import { Title, Text, Space, Anchor, Modal } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 
-export default function Help({
-  opened,
-  close,
-}: {
-  opened: boolean;
-  close: () => void;
-}) {
-  const isMobile = useMediaQuery('(max-width: 50em)');
-
+export function HelpContent() {
   return (
-    <Modal
-      opened={opened}
-      size='xl'
-      fullScreen={isMobile}
-      onClose={close}
-      title='Help'
-    >
+    <>
       <Title order={4} className=' text-center'>
         Calculator
       </Title>
       <p>
-        This 1 Rep Max calculator can help you estimate your maximum strength
-        for any lift across various rep ranges. It also calculates the
+        This One Rep Max (1RM) calculator can help you estimate your maximum
+        strength for any lift across various rep ranges. It also calculates the
         percentages of your 1 rep max required by many training programs. Any
         lift can be used from olympic lifts like Bench Press, Squat, and
         Deadlift to isolation lifts like bicep curls. This calculator uses many{' '}
@@ -106,6 +92,28 @@ export default function Help({
           </Text>
         </li>
       </ul>
+    </>
+  );
+}
+
+export default function Help({
+  opened,
+  close,
+}: {
+  opened: boolean;
+  close: () => void;
+}) {
+  const isMobile = useMediaQuery('(max-width: 50em)');
+
+  return (
+    <Modal
+      opened={opened}
+      size='xl'
+      fullScreen={isMobile}
+      onClose={close}
+      title='Help'
+    >
+      <HelpContent />
     </Modal>
   );
 }

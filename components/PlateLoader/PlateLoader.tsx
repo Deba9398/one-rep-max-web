@@ -8,6 +8,7 @@ import {
   IconMinus,
   IconPlus,
 } from '@tabler/icons-react';
+import { logEvent } from '@/util/analytics';
 
 function roundWeightToSmallestPlate(
   weight: number,
@@ -228,7 +229,13 @@ function LoadedBarbellVisual({
         }}
       ></div>
       <div className='flex items-center gap-4'>
-        <Button variant='subtle' onClick={() => weightAdjustmentCallback(-1)}>
+        <Button
+          variant='subtle'
+          onClick={() => {
+            weightAdjustmentCallback(-1);
+            logEvent('plate_loader_decrement');
+          }}
+        >
           <IconMinus size='1rem' />
         </Button>
         <div
@@ -239,7 +246,13 @@ function LoadedBarbellVisual({
             borderBottom: 'none',
           }}
         ></div>
-        <Button variant='subtle' onClick={() => weightAdjustmentCallback(1)}>
+        <Button
+          variant='subtle'
+          onClick={() => {
+            weightAdjustmentCallback(1);
+            logEvent('plate_loader_increment');
+          }}
+        >
           <IconPlus size='1rem' />
         </Button>
       </div>

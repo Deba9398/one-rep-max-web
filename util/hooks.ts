@@ -1,6 +1,6 @@
 import { AccordionValue } from '@mantine/core';
 import { useState } from 'react';
-import { LogEvent } from './analytics';
+import { logEvent } from './analytics';
 
 export function useAccordionState(
   accordionName: string
@@ -20,10 +20,10 @@ export function useAccordionState(
     if (panelClosed) {
       const timeout = setTimeout(() => setOpenPanels(value));
       setTimeoutId(timeout);
-      LogEvent(`accordion_${accordionName}_panel_closed`);
+      logEvent(`accordion_${accordionName}_panel_closed`);
     } else {
       setOpenPanels(value);
-      LogEvent(`accordion_${accordionName}_panel_opened`);
+      logEvent(`accordion_${accordionName}_panel_opened`);
     }
   };
 

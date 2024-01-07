@@ -1,4 +1,5 @@
 'use client';
+import { logEvent } from '@/util/analytics';
 import {
   AppShell,
   Group,
@@ -107,9 +108,11 @@ function ColorSchemeToggle() {
       aria-label={
         computedColorScheme === 'light' ? 'Use Dark Mode' : 'Use Light Mode'
       }
-      onClick={() =>
-        setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')
-      }
+      onClick={() => {
+        const newTheme = computedColorScheme === 'light' ? 'dark' : 'light';
+        setColorScheme(newTheme);
+        logEvent(`change_color_scheme_header_${newTheme}`);
+      }}
     >
       {computedColorScheme === 'light' ? <IconMoon /> : <IconSun />}
     </Button>

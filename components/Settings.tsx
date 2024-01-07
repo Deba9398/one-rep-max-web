@@ -1,3 +1,4 @@
+import { logEvent } from '@/util/analytics';
 import {
   formatWeight,
   getWeightUnits,
@@ -6,9 +7,6 @@ import {
 } from '@/util/formatter';
 import {
   Card,
-  Checkbox,
-  CheckboxGroup,
-  Group,
   MantineColorScheme,
   Radio,
   Space,
@@ -31,10 +29,12 @@ export default function Settings() {
   const updateUnitPreference = (val: SetStateAction<string>) => {
     setWeightUnits(val.toString());
     setUnitPreference(val);
+    logEvent('change_units_pref_settings');
   };
 
   const updateColorScheme = (val: SetStateAction<string>) => {
     setColorScheme(val.toString() as MantineColorScheme);
+    logEvent(`change_color_scheme_settings_${val}`);
   };
 
   return (
@@ -108,6 +108,7 @@ function AvailableWeights() {
       plates.sort((a, b) => parseFloat(b) - parseFloat(a)).toString()
     );
     setSelectedPlates(plates);
+    logEvent('change_available_weights_settings');
   };
 
   return (

@@ -1,6 +1,6 @@
 const googleAnalytics = window.gtag;
 
-export function LogEvent(
+export function logEvent(
   eventName: string,
   params?: { [key: string]: string }
 ) {

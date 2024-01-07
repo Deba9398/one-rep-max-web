@@ -1,31 +1,63 @@
 'use client';
 import PercentagesTable from '@/components/PercentagesTable';
 import RepMaxTable from '@/components/RepMaxTable';
-import { getWeightUnits, isMetricWeights } from '@/util/formatter';
+import { getWeightUnits, setWeightUnits } from '@/util/formatter';
 import { calculateRepMaxValues } from '@/util/repMaxFormulas';
 import {
-  Anchor,
   Box,
   Button,
   Card,
   Group,
   NumberInput,
   NumberInputHandlers,
+  SegmentedControl,
   Space,
   Title,
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
-import { useRef, useState } from 'react';
-import Help from './Help';
-import { LogEvent } from '@/util/analytics';
+import { SetStateAction, useRef, useState } from 'react';
+import { HelpContent } from './Help';
+import { logEvent } from '@/util/analytics';
+import {
+  getLastRepsPerformed,
+  getLastWeightLifted,
+  setLastRepsPerformed,
+  setLastWeightLifted,
+} from '@/util/localStorage';
 
 export default function OneRepMaxCalc() {
-  const [opened, { open, close }] = useDisclosure(false);
   const [weightLifted, setWeightLifted] = useState<number>(
-    isMetricWeights() ? 80 : 135
+    getLastWeightLifted()
   );
-  const [repsPerformed, setRepsPerformed] = useState<number>(8);
+  const [repsPerformed, setRepsPerformed] = useState<number>(
+    getLastRepsPerformed()
+  );
+
+  const [unitPreference, setUnitPreference] = useState<string>(
+    getWeightUnits()
+  );
+
+  const updateWeightLiftedAndCache = (weightLifted: number) => {
+    setLastWeightLifted(weightLifted);
+    setWeightLifted(weightLifted);
+  };
+
+  const updateRepsPerformedAndCache = (repsPerformed: number) => {
+    setLastRepsPerformed(repsPerformed);
+    setRepsPerformed(repsPerformed);
+  };
+
+  const updateUnitPreference = (val: SetStateAction<string>) => {
+    if (val === 'kg') {
+      updateWeightLiftedAndCache(Math.round(weightLifted / 2.20462));
+    } else {
+      updateWeightLiftedAndCache(Math.round(weightLifted * 2.20462));
+    }
+
+    setWeightUnits(val.toString());
+    setUnitPreference(val);
+    logEvent('change_units_pref_orm');
+  };
 
   const weightLiftedHandlersRef = useRef<NumberInputHandlers>(null);
   const weightLiftedInputRef = useRef<HTMLInputElement>(null);
@@ -48,6 +80,16 @@ export default function OneRepMaxCalc() {
       <Box maw={600} mx='auto'>
         <Card padding='xl' radius='lg' withBorder>
           <div className='text-center'>
+            <SegmentedControl
+              fullWidth
+              value={unitPreference}
+              onChange={updateUnitPreference}
+              data={[
+                { label: 'Imperial (Lbs)', value: 'lbs' },
+                { label: 'Metric (Kg)', value: 'kg' },
+              ]}
+            />
+            <Space h={12} />
             <Title id='weightInputLabel' order={4} pb={8}>
               Weight ({getWeightUnits()})
             </Title>
@@ -57,7 +99,7 @@ export default function OneRepMaxCalc() {
                 disabled={weightLifted <= 0}
                 onClick={() => {
                   weightLiftedHandlersRef.current?.decrement();
-                  LogEvent('click_decrement_weight');
+                  logEvent('click_decrement_weight');
                 }}
                 aria-label='Decrement Weight'
               >
@@ -77,8 +119,8 @@ export default function OneRepMaxCalc() {
                 ref={weightLiftedInputRef}
                 handlersRef={weightLiftedHandlersRef}
                 onChange={(val) => {
-                  setWeightLifted(parseFloat(val.toString()));
-                  LogEvent('change_weight_lifted');
+                  updateWeightLiftedAndCache(parseFloat(val.toString()));
+                  logEvent('change_weight_lifted');
                 }}
                 onFocus={() => weightLiftedInputRef.current?.select()}
                 value={weightLifted}
@@ -94,7 +136,7 @@ export default function OneRepMaxCalc() {
                 disabled={weightLifted >= 1000}
                 onClick={() => {
                   weightLiftedHandlersRef.current?.increment();
-                  LogEvent('click_increment_weight');
+                  logEvent('click_increment_weight');
                 }}
                 aria-label='Increment Weight'
               >
@@ -114,7 +156,7 @@ export default function OneRepMaxCalc() {
                 disabled={repsPerformed <= 1}
                 onClick={() => {
                   repsPerformedHandlersRef.current?.decrement();
-                  LogEvent('click_decrement_reps');
+                  logEvent('click_decrement_reps');
                 }}
                 aria-label='Decrement Reps'
               >
@@ -133,8 +175,8 @@ export default function OneRepMaxCalc() {
                 ref={repsPerformedInputRef}
                 handlersRef={repsPerformedHandlersRef}
                 onChange={(val) => {
-                  setRepsPerformed(parseFloat(val.toString()));
-                  LogEvent('change_reps_performed');
+                  updateRepsPerformedAndCache(parseFloat(val.toString()));
+                  logEvent('change_reps_performed');
                 }}
                 onFocus={() => repsPerformedInputRef.current?.select()}
                 value={repsPerformed}
@@ -150,7 +192,7 @@ export default function OneRepMaxCalc() {
                 disabled={repsPerformed >= 15}
                 onClick={() => {
                   repsPerformedHandlersRef.current?.increment();
-                  LogEvent('click_increment_reps');
+                  logEvent('click_increment_reps');
                 }}
                 aria-label='Increment Reps'
               >
@@ -158,12 +200,6 @@ export default function OneRepMaxCalc() {
               </Button>
             </Group>
           </div>
-          <Space h={24} />
-          <span className='text-center'>
-            <Anchor onClick={open} component='button' c='dimmed' size='sm'>
-              Not sure what to do here? View the help content.
-            </Anchor>
-          </span>
         </Card>
       </Box>
 
@@ -183,7 +219,11 @@ export default function OneRepMaxCalc() {
           </div>
         </div>
       </div>
-      <Help opened={opened} close={close} />
+      <div className='container mx-auto mt-8 max-w-[1200px] xl:px-4'>
+        <Card padding='xl' radius='lg' withBorder>
+          <HelpContent />
+        </Card>
+      </div>
     </main>
   );
 }
