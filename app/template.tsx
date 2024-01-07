@@ -1,5 +1,4 @@
 'use client';
-import { logEvent } from '@/util/analytics';
 import {
   AppShell,
   Group,
@@ -111,7 +110,6 @@ function ColorSchemeToggle() {
       onClick={() => {
         const newTheme = computedColorScheme === 'light' ? 'dark' : 'light';
         setColorScheme(newTheme);
-        logEvent(`change_color_scheme_header_${newTheme}`);
       }}
     >
       {computedColorScheme === 'light' ? <IconMoon /> : <IconSun />}
