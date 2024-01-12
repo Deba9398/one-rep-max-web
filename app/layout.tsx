@@ -7,9 +7,9 @@ import Script from 'next/script';
 const isProduction = process.env.NODE_ENV === 'production';
 
 export const metadata: Metadata = {
-  title: 'One Rep Max (1RM) Calculator',
+  title: '1 Rep Max (1RM) Calculator',
   description:
-    'Calculate your one rep max (1RM), get percentage breakdowns, and visualize barbell plate configurations with this free web app. Works for Bench Press, Squat, Deadlift, and more!',
+    'The best 1 Rep Max (1RM) Calculator. Get percentage breakdowns and view the barbell loader with this free web app. Works for Bench Press, Squat, Deadlift, and more!',
 };
 
 export default function RootLayout({
