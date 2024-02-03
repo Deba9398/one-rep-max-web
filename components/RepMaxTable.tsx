@@ -52,7 +52,9 @@ export const RepMaxRowContent = ({
     <div>
       <div className='flex pt-4 px-6 text-center'>
         <div className='flex-1'>
-          <Title order={4}>Calculation Range</Title>
+          <Title order={3} size='h4'>
+            Calculation Range
+          </Title>
           <Text size='lg'>
             {formatWeight(
               repMaxCalculation[repMaxCalculation.length - 1].value,
@@ -62,7 +64,9 @@ export const RepMaxRowContent = ({
           </Text>
         </div>
         <div className='flex-1'>
-          <Title order={4}>Std. Deviation</Title>
+          <Title order={3} size='h4'>
+            Std. Deviation
+          </Title>
           <Text size='lg' c={color}>
             ±{formatWeight(stdDeviation, 1)} ({percentDeviation.toFixed(1)}%)
           </Text>

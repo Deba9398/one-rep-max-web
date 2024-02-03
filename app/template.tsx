@@ -73,7 +73,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
               height={36}
               priority
             />
-            <Title order={1} className='truncate flex-1'>
+            <Title order={1} size={24} className='truncate flex-1'>
               1 Rep Max Calculator
             </Title>
             <ColorSchemeToggle />

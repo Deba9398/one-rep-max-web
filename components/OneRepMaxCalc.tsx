@@ -33,9 +33,8 @@ export default function OneRepMaxCalc() {
     getLastRepsPerformed()
   );
 
-  const [unitPreference, setUnitPreference] = useState<string>(
-    getWeightUnits()
-  );
+  const [unitPreference, setUnitPreference] =
+    useState<string>(getWeightUnits());
 
   const updateWeightLiftedAndCache = (weightLifted: number) => {
     setLastWeightLifted(weightLifted);
@@ -90,7 +89,7 @@ export default function OneRepMaxCalc() {
               ]}
             />
             <Space h={12} />
-            <Title id='weightInputLabel' order={4} pb={8}>
+            <Title id='weightInputLabel' order={2} size='h4' pb={8}>
               Weight ({getWeightUnits()})
             </Title>
             <Group gap={0}>
@@ -147,7 +146,7 @@ export default function OneRepMaxCalc() {
 
           <Space h={12} />
           <div className='text-center'>
-            <Title id='repsInputLabel' order={4} pb={8}>
+            <Title id='repsInputLabel' order={2} size='h4' pb={8}>
               Reps
             </Title>
             <Group gap={0}>
@@ -206,13 +205,13 @@ export default function OneRepMaxCalc() {
       <div className='container mx-auto mt-8'>
         <div className='flex flex-col items-center justify-center xl:flex-row xl:items-start -mx-2 lg:-mx-0'>
           <div className='px-2 xl:px-4 w-full xl:w-1/2 max-w-[600px]'>
-            <Title order={4} className='pb-4 pt-4 text-center'>
+            <Title order={2} size='h4' className='pb-4 pt-4 text-center'>
               Rep Max
             </Title>
             <RepMaxTable repMaxValues={repMaxValues} />
           </div>
           <div className='px-2 xl:px-4 w-full xl:w-1/2 max-w-[600px]'>
-            <Title order={4} className='pb-4 pt-4 text-center'>
+            <Title order={2} size='h4' className='pb-4 pt-4 text-center'>
               Percentages of 1RM
             </Title>
             <PercentagesTable repMaxValues={repMaxValues} />

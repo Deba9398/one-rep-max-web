@@ -22,9 +22,8 @@ const ALL_IMPERIAL_PLATES = [45, 35, 25, 10, 5, 2.5];
 
 export default function Settings() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
-  const [unitPreference, setUnitPreference] = useState<string>(
-    getWeightUnits()
-  );
+  const [unitPreference, setUnitPreference] =
+    useState<string>(getWeightUnits());
 
   const updateUnitPreference = (val: SetStateAction<string>) => {
     setWeightUnits(val.toString());
@@ -39,7 +38,7 @@ export default function Settings() {
 
   return (
     <div className='flex flex-col items-center'>
-      <Title order={4} className='pb-4 pt-4 text-center'>
+      <Title order={2} size='h4' className='pb-4 pt-4 text-center'>
         Settings
       </Title>
 

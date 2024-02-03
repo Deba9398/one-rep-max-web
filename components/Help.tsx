@@ -6,7 +6,7 @@ import { useMediaQuery } from '@mantine/hooks';
 export function HelpContent() {
   return (
     <>
-      <Title order={4} className=' text-center'>
+      <Title order={2} size='h3' className=' text-center'>
         Calculator
       </Title>
       <p>
@@ -39,7 +39,7 @@ export function HelpContent() {
         </li>
       </ol>
       <Space h={48} />
-      <Title order={4} className=' text-center'>
+      <Title order={2} size='h3' className=' text-center'>
         Plate Loader
       </Title>
       <p>
@@ -59,7 +59,7 @@ export function HelpContent() {
       </p>
       <PlateLoader weight={isMetricWeights() ? 75 : 160} />
       <Space h={48} />
-      <Title order={4} className=' text-center'>
+      <Title order={2} size='h3' className=' text-center'>
         Formulas
       </Title>
       <p>

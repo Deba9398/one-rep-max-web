@@ -65,11 +65,15 @@ export default function PlateLoader({ weight }: { weight: number }) {
     <div className='flex-1 flex flex-col items-center'>
       <div className='flex w-full pt-4 px-6 text-center'>
         <div className='flex-1'>
-          <Title order={4}>Barbell Load</Title>
+          <Title order={3} size='h4'>
+            Barbell Load
+          </Title>
           <Text size='lg'>{formatWeight(roundedWeight, 1)}</Text>
         </div>
         <div className='flex-1'>
-          <Title order={4}>Difference</Title>
+          <Title order={3} size='h4'>
+            Difference
+          </Title>
           <Text size='lg' c={diff > 0 ? 'red' : 'green'}>
             <span className='flex items-center justify-center'>
               {diff > 0 && <IconAlertTriangleFilled size='1em' />}
@@ -231,6 +235,7 @@ function LoadedBarbellVisual({
       <div className='flex items-center gap-4'>
         <Button
           variant='subtle'
+          aria-label='Decrement Plate Loader'
           onClick={() => {
             weightAdjustmentCallback(-1);
             logEvent('plate_loader_decrement');
@@ -248,6 +253,7 @@ function LoadedBarbellVisual({
         ></div>
         <Button
           variant='subtle'
+          aria-label='Increment Plate Loader'
           onClick={() => {
             weightAdjustmentCallback(1);
             logEvent('plate_loader_increment');
