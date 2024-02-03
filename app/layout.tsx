@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ColorSchemeScript } from '@mantine/core';
 import '@mantine/core/styles.css';
 import './globals.css';
-import Script from 'next/script';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -24,32 +24,8 @@ export default function RootLayout({
       </head>
       <body>
         {children}
-        <GoogleAnalytics />
+        {isProduction && <GoogleAnalytics gaId='G-TS8S6LZJLM' />}
       </body>
     </html>
-  );
-}
-
-function GoogleAnalytics() {
-  if (!isProduction) {
-    return null;
-  }
-
-  return (
-    <>
-      <Script
-        async
-        src='https://www.googletagmanager.com/gtag/js?id=G-TS8S6LZJLM'
-      />
-      <Script id='google-analytics'>
-        {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'G-TS8S6LZJLM');
-          `}
-      </Script>
-    </>
   );
 }
