@@ -24,8 +24,8 @@ export default function RootLayout({
       </head>
       <body>
         {children}
-        {isProduction && <GoogleAnalytics gaId='G-TS8S6LZJLM' />}
       </body>
+      {!isProduction && <GoogleAnalytics gaId='G-TS8S6LZJLM' />}
     </html>
   );
 }
