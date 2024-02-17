@@ -1,7 +1,11 @@
 'use client';
 import PercentagesTable from '@/components/PercentagesTable';
 import RepMaxTable from '@/components/RepMaxTable';
-import { getWeightUnits, setWeightUnits } from '@/util/formatter';
+import {
+  getWeightUnits,
+  isMetricWeights,
+  setWeightUnits,
+} from '@/util/formatter';
 import { calculateRepMaxValues } from '@/util/repMaxFormulas';
 import {
   Box,
@@ -15,7 +19,7 @@ import {
   Title,
 } from '@mantine/core';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
-import { SetStateAction, useRef, useState } from 'react';
+import { SetStateAction, useMemo, useRef, useState } from 'react';
 import { HelpContent } from './Help';
 import { logEvent } from '@/util/analytics';
 import {
@@ -33,8 +37,9 @@ export default function OneRepMaxCalc() {
     getLastRepsPerformed()
   );
 
-  const [unitPreference, setUnitPreference] =
-    useState<string>(getWeightUnits());
+  const [unitPreference, setUnitPreference] = useState<string>(
+    getWeightUnits()
+  );
 
   const updateWeightLiftedAndCache = (weightLifted: number) => {
     setLastWeightLifted(weightLifted);
@@ -57,6 +62,15 @@ export default function OneRepMaxCalc() {
     setUnitPreference(val);
     logEvent('change_units_pref_orm');
   };
+
+  const isMetric = isMetricWeights();
+  const helpMemoized = useMemo(() => {
+    return (
+      <Card padding='xl' radius='lg' withBorder>
+        <HelpContent isMetricWeights={isMetric} />
+      </Card>
+    );
+  }, [isMetric]);
 
   const weightLiftedHandlersRef = useRef<NumberInputHandlers>(null);
   const weightLiftedInputRef = useRef<HTMLInputElement>(null);
@@ -219,9 +233,7 @@ export default function OneRepMaxCalc() {
         </div>
       </div>
       <div className='container mx-auto mt-8 max-w-[1200px] xl:px-4'>
-        <Card padding='xl' radius='lg' withBorder>
-          <HelpContent />
-        </Card>
+        {helpMemoized}
       </div>
     </main>
   );

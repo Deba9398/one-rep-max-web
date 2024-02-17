@@ -1,9 +1,8 @@
-import { isMetricWeights } from '@/util/formatter';
 import PlateLoader from './PlateLoader';
 import { Title, Text, Space, Anchor, Modal } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 
-export function HelpContent() {
+export function HelpContent({ isMetricWeights }: { isMetricWeights: boolean }) {
   return (
     <>
       <Title order={2} size='h3' className=' text-center'>
@@ -57,7 +56,7 @@ export function HelpContent() {
         weight on the barbell using the +/- buttons. Go ahead and try below,
         it&apos;s interactive!
       </p>
-      <PlateLoader weight={isMetricWeights() ? 75 : 160} />
+      <PlateLoader weight={isMetricWeights ? 75 : 160} />
       <Space h={48} />
       <Title order={2} size='h3' className=' text-center'>
         Formulas
@@ -99,9 +98,11 @@ export function HelpContent() {
 export default function Help({
   opened,
   close,
+  isMetricWeights,
 }: {
   opened: boolean;
   close: () => void;
+  isMetricWeights: boolean;
 }) {
   const isMobile = useMediaQuery('(max-width: 50em)');
 
@@ -113,7 +114,7 @@ export default function Help({
       onClose={close}
       title='Help'
     >
-      <HelpContent />
+      <HelpContent isMetricWeights={isMetricWeights} />
     </Modal>
   );
 }
