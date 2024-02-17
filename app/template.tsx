@@ -14,7 +14,12 @@ import {
   MantineThemeOverride,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconExternalLink, IconMoon, IconSun } from '@tabler/icons-react';
+import {
+  IconExternalLink,
+  IconMoon,
+  IconSun,
+  IconMessageDots,
+} from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -148,6 +153,11 @@ function NavBar() {
         href='https://exrx.net/Testing/WeightLifting/StrengthStandards'
         target='_blank'
         rightSection={<IconExternalLink size='1rem' stroke={1.5} />}
+      />
+      <NavLink
+        label='Send Feedback'
+        href='mailto:codegardenerllc@gmail.com?subject=1 Rep Max Web Feedback'
+        rightSection={<IconMessageDots size='1rem' stroke={1.5} />}
       />
     </AppShell.Navbar>
   );
