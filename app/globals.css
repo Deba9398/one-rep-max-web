@@ -1,2 +1,12 @@
 @tailwind components;
 @tailwind utilities;
+
+:root[data-mantine-color-scheme='light'] {
+  --mantine-color-body: #f8f9fa;
+  --app-shell-color: #fff;
+}
+
+:root[data-mantine-color-scheme='dark'] {
+  --app-shell-color: var(--mantine-color-body);
+  --app-shell-color: var(--mantine-color-dark-6);
+}

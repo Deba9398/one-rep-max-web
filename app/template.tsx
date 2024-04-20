@@ -23,24 +23,26 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
-const resolver: CSSVariablesResolver = (theme) => ({
-  variables: {
-    '--title-fw': '500',
-  },
-  light: {
-    '--app-body-background': '#f8f9fa',
-    '--mantine-color-text': '#333',
-  },
-  dark: {
-    '--app-body-background': '--mantine-color-body',
-  },
-});
+import { useEffect } from 'react';
 
 const themeOverrides: MantineThemeOverride = {
   primaryShade: { light: 9, dark: 4 },
   headings: {
     fontWeight: '500',
+  },
+  colors: {
+    dark: [
+      '#C1C2C5',
+      '#A6A7AB',
+      '#909296',
+      '#5c5f66',
+      '#373A40',
+      '#2C2E33',
+      '#25262b',
+      '#1A1B1E',
+      '#141517',
+      '#101113',
+    ],
   },
 };
 
@@ -48,11 +50,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
   const [opened, { toggle }] = useDisclosure();
 
   return (
-    <MantineProvider
-      defaultColorScheme='auto'
-      cssVariablesResolver={resolver}
-      theme={themeOverrides}
-    >
+    <MantineProvider defaultColorScheme='auto' theme={themeOverrides}>
       <AppShell
         header={{ height: 64 }}
         navbar={{
@@ -62,7 +60,11 @@ export default function Template({ children }: { children: React.ReactNode }) {
         }}
         padding='md'
       >
-        <AppShell.Header>
+        <AppShell.Header
+          style={{
+            background: 'var(--app-shell-color)',
+          }}
+        >
           <Group h='100%' w='100%' px='md'>
             <Burger
               opened={opened}
@@ -86,13 +88,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
         </AppShell.Header>
 
         <NavBar />
-        <AppShell.Main
-          style={{
-            background: 'var(--app-body-background)',
-          }}
-        >
-          {children}
-        </AppShell.Main>
+        <AppShell.Main>{children}</AppShell.Main>
       </AppShell>
     </MantineProvider>
   );
@@ -103,6 +99,15 @@ function ColorSchemeToggle() {
   const computedColorScheme = useComputedColorScheme('light', {
     getInitialValueInEffect: true,
   });
+
+  useEffect(() => {
+    const metaThemeColor = document.querySelector('meta[name=theme-color]');
+    const color = computedColorScheme === 'light' ? '#ffffff' : '#25262b';
+
+    if (metaThemeColor) {
+      metaThemeColor.setAttribute('content', color);
+    }
+  }, [computedColorScheme]);
 
   return (
     <Button
@@ -137,7 +142,12 @@ function NavBar() {
   ];
 
   return (
-    <AppShell.Navbar p='md'>
+    <AppShell.Navbar
+      p='md'
+      style={{
+        background: 'var(--app-shell-color)',
+      }}
+    >
       {activeLinks.map((l) => (
         <NavLink
           key={l.label}

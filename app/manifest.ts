@@ -4,8 +4,6 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: '1 Rep Max',
     short_name: '1RM',
-    theme_color: '#1a1b1e',
-    background_color: '#1a1b1e',
     display: 'standalone',
     orientation: 'portrait',
     scope: '/',
