@@ -25,12 +25,6 @@ export default function RootLayout({
     <html lang='en'>
       <head>
         <ColorSchemeScript />
-        <meta name='apple-mobile-web-app-capable' content='yes' />
-
-        <meta
-          name='apple-mobile-web-app-status-bar-style'
-          content='black-translucent'
-        ></meta>
       </head>
       <body>{children}</body>
       {isProduction && <GoogleAnalytics gaId='G-TS8S6LZJLM' />}
