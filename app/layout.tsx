@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from 'next';
 import { ColorSchemeScript } from '@mantine/core';
 import '@mantine/core/styles.css';
-import './globals.css';
 import { GoogleAnalytics } from '@next/third-parties/google';
+import './globals.css';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -22,9 +22,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en'>
+    <html lang='en' data-mantine-color-scheme='light'>
       <head>
-        <ColorSchemeScript />
+        <ColorSchemeScript defaultColorScheme='light' />
       </head>
       <body>{children}</body>
       {isProduction && <GoogleAnalytics gaId='G-TS8S6LZJLM' />}

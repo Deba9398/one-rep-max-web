@@ -1,5 +1,4 @@
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
 :root[data-mantine-color-scheme='light'] {
   --mantine-color-body: #f8f9fa;

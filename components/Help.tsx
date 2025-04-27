@@ -4,11 +4,11 @@ import { useMediaQuery } from '@mantine/hooks';
 
 export function HelpContent({ isMetricWeights }: { isMetricWeights: boolean }) {
   return (
-    <>
+    <div>
       <Title order={2} size='h3' className=' text-center'>
         Calculator
       </Title>
-      <p>
+      <p className='my-2'>
         This One Rep Max (1RM) calculator can help you estimate your maximum
         strength for any lift across various rep ranges. It also calculates the
         percentages of your 1 rep max required by many training programs. Any
@@ -19,7 +19,7 @@ export function HelpContent({ isMetricWeights }: { isMetricWeights: boolean }) {
         </Anchor>{' '}
         to calculate these estimates. Here&apos;s how to use it:
       </p>
-      <ol>
+      <ol className='list-decimal list-inside pl-5 space-y-2'>
         <li>
           Start by warming up and then performing the lift you&apos;d like to
           calculate in a rep range you&apos;re comfortable with. Generally lower
@@ -37,20 +37,21 @@ export function HelpContent({ isMetricWeights }: { isMetricWeights: boolean }) {
           2 repetitions and so on.
         </li>
       </ol>
+
       <Space h={48} />
       <Title order={2} size='h3' className=' text-center'>
         Plate Loader
       </Title>
-      <p>
+      <p className='my-2'>
         Now that you know what weight you can lift, let&apos;s load up the bar!
         Expand any row to reveal the plate loader. This shows a visualization of
         what plates to load on each side of the bar.{' '}
       </p>
-      <p>
+      <p className='my-2'>
         Is the loader showing a plate you don&apos;t have? No problem, pick your
         available plates on the <Anchor href='/settings'>Settings page</Anchor>.
       </p>
-      <p>
+      <p className='my-2'>
         The plate loader shows the <span className='font-bold'>difference</span>{' '}
         between the estimated max and the visualized barbell. You can adjust the
         weight on the barbell using the +/- buttons. Go ahead and try below,
@@ -61,20 +62,20 @@ export function HelpContent({ isMetricWeights }: { isMetricWeights: boolean }) {
       <Title order={2} size='h3' className=' text-center'>
         Formulas
       </Title>
-      <p>
+      <p className='my-2'>
         The calculator uses 7 formulas to calculate these estimates: Brzycki,
         Epley, Lander, Lombardi, Mayhew et al., O&apos;Connor et al., and
         Wathan. These estimates are averaged together to give the final estimate
         displayed.
       </p>
-      <p>
+      <p className='my-2'>
         What do the colors mean? Since each formula produces a different value,
         the colors represent how much uncertainty there is in the final value.
         The standard deviation of the formulas is used to determine the color.
         The lower the standard deviation, the more agreement there is between
         the formulas.
       </p>
-      <ul>
+      <ul className='list-disc pl-10 space-y-2'>
         <li>
           <Text size='lg' c='green'>
             Green: 2% or less
@@ -91,7 +92,7 @@ export function HelpContent({ isMetricWeights }: { isMetricWeights: boolean }) {
           </Text>
         </li>
       </ul>
-    </>
+    </div>
   );
 }
 
