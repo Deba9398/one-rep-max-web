@@ -3484,7 +3484,6 @@ __metadata:
     eslint-config-next: "npm:^15.3.1"
     eslint-config-prettier: "npm:^10.1.2"
     next: "npm:15.3.1"
-    postcss: "npm:^8.5.3"
     postcss-color-function: "npm:^4.1.0"
     postcss-import: "npm:^16.1.0"
     postcss-preset-mantine: "npm:^1.17.0"
@@ -3746,7 +3745,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.4.23, postcss@npm:^8.4.41, postcss@npm:^8.5.3":
+"postcss@npm:^8.4.23, postcss@npm:^8.4.41":
   version: 8.5.3
   resolution: "postcss@npm:8.5.3"
   dependencies:
