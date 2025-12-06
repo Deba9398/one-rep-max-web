@@ -2,8 +2,8 @@
 const nextConfig = {
   output: 'export',
   images: { unoptimized: true },
+  reactCompiler: true,
   experimental: {
-    reactCompiler: true,
     optimizeCss: true,
     optimizePackageImports: [
       '@mantine/core',

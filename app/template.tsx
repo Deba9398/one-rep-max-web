@@ -9,7 +9,6 @@ import {
   Button,
   useMantineColorScheme,
   useComputedColorScheme,
-  CSSVariablesResolver,
   MantineProvider,
   MantineThemeOverride,
 } from '@mantine/core';
