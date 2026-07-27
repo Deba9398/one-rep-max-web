@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { ColorSchemeScript } from '@mantine/core';
+import { ColorSchemeScript, mantineHtmlProps } from '@mantine/core';
 import '@mantine/core/styles.css';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import './globals.css';
@@ -21,10 +21,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // mantineHtmlProps carries data-mantine-color-scheme AND suppressHydrationWarning.
+  // ColorSchemeScript rewrites that attribute from the stored preference before React
+  // hydrates, so without the suppression React reports the rewrite as a mismatch.
+  // defaultColorScheme must match MantineProvider in template.tsx.
   return (
-    <html lang='en' data-mantine-color-scheme='light'>
+    <html lang='en' {...mantineHtmlProps}>
       <head>
-        <ColorSchemeScript defaultColorScheme='light' />
+        <ColorSchemeScript defaultColorScheme='auto' />
       </head>
       <body>{children}</body>
       {isProduction && <GoogleAnalytics gaId='G-TS8S6LZJLM' />}
