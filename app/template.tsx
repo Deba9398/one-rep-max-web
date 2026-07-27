@@ -23,7 +23,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
-import EulaModal from '@/components/EulaModal';
+import EulaBanner from '@/components/EulaBanner';
 import { useHydrated } from '@/util/units';
 
 const themeOverrides: MantineThemeOverride = {
@@ -52,7 +52,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
 
   return (
     <MantineProvider defaultColorScheme='auto' theme={themeOverrides}>
-      <EulaModal />
+      <EulaBanner />
       <AppShell
         header={{ height: 64 }}
         navbar={{
@@ -167,6 +167,12 @@ function NavBar() {
         />
       ))}
       <Divider my='sm' />
+      <NavLink
+        label='Terms of Use'
+        component={Link}
+        href='/terms'
+        active={pathname === '/terms'}
+      />
       <NavLink
         label='Strength Standards'
         href='https://exrx.net/Testing/WeightLifting/StrengthStandards'
