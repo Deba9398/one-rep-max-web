@@ -1,8 +1,8 @@
 import { logEvent } from '@/util/analytics';
 import {
   getDefaultPlates,
-  getStoredPlates,
   setStoredPlates,
+  useAvailablePlates,
 } from '@/util/plates';
 import { useFormatWeight, useUnitPreference } from '@/util/units';
 import {
@@ -15,7 +15,7 @@ import {
   Title,
   useMantineColorScheme,
 } from '@mantine/core';
-import { SetStateAction, useEffect, useState } from 'react';
+import { SetStateAction, useState } from 'react';
 
 export default function Settings() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
@@ -68,29 +68,28 @@ export default function Settings() {
           </Stack>
         </Radio.Group>
         <Space h='xl' />
-        <AvailableWeights />
+        <AvailableWeights key={units} />
       </Card>
     </div>
   );
 }
 
+// Keyed on units by the caller, so switching unit systems remounts this and drops any
+// selection belonging to the old plate set.
 function AvailableWeights() {
-  const { units, isMetric, hydrated } = useUnitPreference();
+  const { units, isMetric } = useUnitPreference();
   const formatWeight = useFormatWeight();
   const plates = getDefaultPlates(isMetric);
-  const [selectedPlates, setSelectedPlates] = useState<string[]>([]);
+  const storedPlates = useAvailablePlates();
 
-  useEffect(() => {
-    if (!hydrated) {
-      return;
-    }
-
-    setSelectedPlates(getStoredPlates(units, isMetric).map((p) => p.toString()));
-  }, [units, isMetric, hydrated]);
+  // Null until the user touches a switch; until then the stored set is the source of
+  // truth, which also keeps the prerendered markup on the defaults.
+  const [selected, setSelected] = useState<string[] | null>(null);
+  const selectedPlates = selected ?? storedPlates.map((p) => p.toString());
 
   const updateAvailableWeight = (plates: string[]) => {
     setStoredPlates(units, plates);
-    setSelectedPlates(plates);
+    setSelected(plates);
     logEvent('change_available_weights_settings');
   };
 

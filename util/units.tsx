@@ -1,20 +1,15 @@
 'use client';
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { useCallback, useSyncExternalStore } from 'react';
 import { formatWeightWithUnits, roundToDecimalPlaces } from './formatter';
 
 const UNIT_PREFERENCE_KEY = 'unitPreference';
 
-// The static export renders this tree in Node at build time, and the browser's first
-// render has to produce identical markup. So the provider starts on the build-time
-// default and swaps in the stored preference from a mount effect.
+// What the build render and the browser's first render both use. React swaps to the
+// stored value after hydration, so the markup matches the static HTML either way.
 const DEFAULT_UNITS = 'lbs';
+
+const listeners = new Set<() => void>();
+let cachedUnits: string | null = null;
 
 function readStoredUnits() {
   const stored = localStorage.getItem(UNIT_PREFERENCE_KEY);
@@ -25,63 +20,58 @@ function readStoredUnits() {
   return navigator.language.startsWith('en-US') ? 'lbs' : 'kg';
 }
 
-type UnitPreference = {
-  units: string;
-  isMetric: boolean;
-  setUnits: (units: string) => void;
-  // False during the build render and the browser's first render, true once the stored
-  // preference has been read. Consumers that load their own stored values wait on this,
-  // since child effects run before this provider's.
-  hydrated: boolean;
-};
+function subscribe(onStoreChange: () => void) {
+  listeners.add(onStoreChange);
+  return () => {
+    listeners.delete(onStoreChange);
+  };
+}
 
-const UnitPreferenceContext = createContext<UnitPreference>({
-  units: DEFAULT_UNITS,
-  isMetric: false,
-  setUnits: () => {},
-  hydrated: false,
-});
+function getSnapshot() {
+  cachedUnits ??= readStoredUnits();
+  return cachedUnits;
+}
 
-export function UnitPreferenceProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [units, setUnitsState] = useState(DEFAULT_UNITS);
-  const [hydrated, setHydrated] = useState(false);
+function getServerSnapshot() {
+  return DEFAULT_UNITS;
+}
 
-  useEffect(() => {
-    setUnitsState(readStoredUnits());
-    setHydrated(true);
-  }, []);
+export function setWeightUnits(units: string) {
+  localStorage.setItem(UNIT_PREFERENCE_KEY, units);
+  cachedUnits = units;
+  listeners.forEach((listener) => listener());
+}
 
-  const setUnits = useCallback((next: string) => {
-    localStorage.setItem(UNIT_PREFERENCE_KEY, next);
-    setUnitsState(next);
-  }, []);
+export function useWeightUnits() {
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+}
 
-  const value = useMemo(
-    () => ({ units, isMetric: units === 'kg', setUnits, hydrated }),
-    [units, setUnits, hydrated]
-  );
+export function useIsMetric() {
+  return useWeightUnits() === 'kg';
+}
 
-  return (
-    <UnitPreferenceContext.Provider value={value}>
-      {children}
-    </UnitPreferenceContext.Provider>
+const subscribeToNothing = () => () => {};
+
+// False on the server and during the hydration render, true afterwards. Lets consumers
+// defer their own localStorage reads until the markup has settled.
+export function useHydrated() {
+  return useSyncExternalStore(
+    subscribeToNothing,
+    () => true,
+    () => false
   );
 }
 
 export function useUnitPreference() {
-  return useContext(UnitPreferenceContext);
-}
+  const units = useWeightUnits();
+  const hydrated = useHydrated();
 
-export function useWeightUnits() {
-  return useUnitPreference().units;
-}
-
-export function useIsMetric() {
-  return useUnitPreference().isMetric;
+  return {
+    units,
+    isMetric: units === 'kg',
+    setUnits: setWeightUnits,
+    hydrated,
+  };
 }
 
 export function useFormatWeight() {

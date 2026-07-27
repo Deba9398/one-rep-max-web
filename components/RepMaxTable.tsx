@@ -87,7 +87,7 @@ export const RepMaxRowContent = ({
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {repMaxCalculation.map((calculation, i) => (
+          {repMaxCalculation.map((calculation) => (
             <Table.Tr key={calculation.formula}>
               <Table.Td>{calculation.formula}</Table.Td>
               <Table.Td align='right'>

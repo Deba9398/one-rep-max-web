@@ -6,7 +6,7 @@ import {
 import { Title, Text, Button, Alert } from '@mantine/core';
 import './PlateLoader.css';
 import { getBarWeight, useAvailablePlates } from '@/util/plates';
-import { SVGProps, useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   IconAlertTriangleFilled,
   IconMinus,
@@ -43,6 +43,15 @@ export default function PlateLoader({ weight }: { weight: number }) {
   const isMetric = useIsMetric();
   const formatWeight = useFormatWeight();
   const plateWeights = useAvailablePlates();
+
+  // Reset the manual +/- offset when the target weight changes. Done during render rather
+  // than in an effect so there is no intermediate paint with the stale adjustment.
+  const [prevWeight, setPrevWeight] = useState(weight);
+  if (prevWeight !== weight) {
+    setPrevWeight(weight);
+    setWeightAdjustment(0);
+  }
+
   const roundedWeight = roundWeightToSmallestPlate(
     weight,
     plateWeights[plateWeights.length - 1],
@@ -50,10 +59,6 @@ export default function PlateLoader({ weight }: { weight: number }) {
     weightAdjustment,
     isMetric
   );
-
-  useEffect(() => {
-    setWeightAdjustment(0);
-  }, [weight]);
 
   const weightAdjustmentCallback = useCallback(
     (adjustment: number) => {
@@ -122,7 +127,7 @@ function LoadedBarbellVisual({
   const plateWeights = useAvailablePlates();
 
   let weightToLoad = (weight - barWeight) / 2;
-  let platesNeeded: number[] = [];
+  const platesNeeded: number[] = [];
 
   plateWeights.forEach((plateWeight) => {
     while (weightToLoad >= plateWeight) {
@@ -268,35 +273,3 @@ function LoadedBarbellVisual({
     </div>
   );
 }
-
-const BarbellClip = (props?: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns='http://www.w3.org/2000/svg'
-    width={40}
-    height={22}
-    fill='none'
-    {...props}
-  >
-    <g clipPath='url(#a)'>
-      <path
-        className='plate-loader__clip-accent'
-        fill='#333'
-        d='M0 3a3 3 0 0 1 3-3h34a3 3 0 0 1 3 3v16a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V3Z'
-      />
-      <rect width={14} height={16} x={18} y={3} fill='#fff' rx={1} />
-      <path
-        className='plate-loader__clip-accent'
-        fill='#333'
-        d='M28 5h1v12h-1zM25 5h1v12h-1zM22 5h1v12h-1z'
-      />
-      <rect width={9} height={4} x={11} y={4} fill='#fff' rx={1} />
-      <rect width={11} height={4} x={5} y={9} fill='#fff' rx={1} />
-      <rect width={9} height={4} x={11} y={14} fill='#fff' rx={1} />
-    </g>
-    <defs>
-      <clipPath id='a'>
-        <path fill='#fff' d='M0 0h40v22H0z' />
-      </clipPath>
-    </defs>
-  </svg>
-);

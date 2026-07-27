@@ -1,6 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { useUnitPreference } from './units';
+import { useHydrated, useUnitPreference } from './units';
 
 export const ALL_METRIC_PLATES = [25, 20, 15, 10, 5, 2.5, 2, 1.5, 1.25, 1, 0.5];
 export const ALL_IMPERIAL_PLATES = [45, 35, 25, 10, 5, 2.5];
@@ -32,19 +31,28 @@ export function setStoredPlates(units: string, plates: string[]) {
     storageKey(units),
     plates.sort((a, b) => parseFloat(b) - parseFloat(a)).toString()
   );
+  storedPlateCache.delete(units);
 }
 
-// PlateLoader renders on the prerendered path (Help renders one directly), so the first
-// render has to use the defaults and pick up stored plates afterwards.
+// getStoredPlates returns a fresh array, so memoize per unit to keep the identity stable
+// across renders. Invalidated by setStoredPlates.
+const storedPlateCache = new Map<string, number[]>();
+
+// PlateLoader renders on the prerendered path (Help renders one directly), so the build
+// render and the hydration render both have to use the defaults.
 export function useAvailablePlates() {
   const { units, isMetric } = useUnitPreference();
-  const [plates, setPlates] = useState<number[]>(() =>
-    getDefaultPlates(isMetric)
-  );
+  const hydrated = useHydrated();
 
-  useEffect(() => {
-    setPlates(getStoredPlates(units, isMetric));
-  }, [units, isMetric]);
+  if (!hydrated) {
+    return getDefaultPlates(isMetric);
+  }
+
+  let plates = storedPlateCache.get(units);
+  if (!plates) {
+    plates = getStoredPlates(units, isMetric);
+    storedPlateCache.set(units, plates);
+  }
 
   return plates;
 }
