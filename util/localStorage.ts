@@ -1,16 +1,11 @@
-import { areClientPreferencesLoaded } from './clientPreferences';
-import { isMetricWeights } from './formatter';
-
 const LAST_WEIGHT_LIFTED_KEY = 'lastWeightLifted';
 const LAST_REPS_PERFORMED_KEY = 'lastRepsPerformed';
 
+export const DEFAULT_WEIGHT_LIFTED_IMPERIAL = 135;
+export const DEFAULT_WEIGHT_LIFTED_METRIC = 80;
 export const DEFAULT_REPS_PERFORMED = 8;
 
 function getNumberFromLocalStorage(key: string) {
-  if (!areClientPreferencesLoaded()) {
-    return null;
-  }
-
   const savedNumber = localStorage.getItem(key);
 
   if (savedNumber !== null && !isNaN(Number(savedNumber))) {
@@ -20,8 +15,12 @@ function getNumberFromLocalStorage(key: string) {
   return null;
 }
 
-export function getLastWeightLifted() {
-  const fallback = isMetricWeights() ? 80 : 135;
+// These read localStorage directly, so they may only be called from effects or event
+// handlers — never during render, which also runs at build time.
+export function getLastWeightLifted(isMetric: boolean) {
+  const fallback = isMetric
+    ? DEFAULT_WEIGHT_LIFTED_METRIC
+    : DEFAULT_WEIGHT_LIFTED_IMPERIAL;
   const savedNumber = getNumberFromLocalStorage(LAST_WEIGHT_LIFTED_KEY);
   return savedNumber ?? fallback;
 }

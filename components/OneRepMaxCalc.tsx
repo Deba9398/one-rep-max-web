@@ -1,11 +1,7 @@
 'use client';
 import PercentagesTable from '@/components/PercentagesTable';
 import RepMaxTable from '@/components/RepMaxTable';
-import {
-  getWeightUnits,
-  isMetricWeights,
-  setWeightUnits,
-} from '@/util/formatter';
+import { useUnitPreference } from '@/util/units';
 import { calculateRepMaxValues } from '@/util/repMaxFormulas';
 import {
   Box,
@@ -22,8 +18,9 @@ import { IconMinus, IconPlus } from '@tabler/icons-react';
 import { SetStateAction, useEffect, useMemo, useRef, useState } from 'react';
 import { HelpContent } from './Help';
 import { logEvent } from '@/util/analytics';
-import { loadClientPreferences } from '@/util/clientPreferences';
 import {
+  DEFAULT_REPS_PERFORMED,
+  DEFAULT_WEIGHT_LIFTED_IMPERIAL,
   getLastRepsPerformed,
   getLastWeightLifted,
   setLastRepsPerformed,
@@ -31,25 +28,28 @@ import {
 } from '@/util/localStorage';
 
 export default function OneRepMaxCalc() {
+  const { units, isMetric, setUnits, hydrated } = useUnitPreference();
+
+  // Seeded with the build-time defaults so the first render matches the static HTML,
+  // then replaced with the visitor's saved values once we're past hydration.
   const [weightLifted, setWeightLifted] = useState<number>(
-    getLastWeightLifted()
+    DEFAULT_WEIGHT_LIFTED_IMPERIAL
   );
   const [repsPerformed, setRepsPerformed] = useState<number>(
-    getLastRepsPerformed()
+    DEFAULT_REPS_PERFORMED
   );
 
-  const [unitPreference, setUnitPreference] = useState<string>(
-    getWeightUnits()
-  );
-
-  // Everything above renders with build-time defaults so the markup matches the static
-  // HTML; swap in the visitor's saved values once we're past hydration.
   useEffect(() => {
-    loadClientPreferences();
-    setUnitPreference(getWeightUnits());
-    setWeightLifted(getLastWeightLifted());
+    if (!hydrated) {
+      return;
+    }
+
+    setWeightLifted(getLastWeightLifted(isMetric));
     setRepsPerformed(getLastRepsPerformed());
-  }, []);
+    // Runs once, when the stored unit preference lands. After that these values are owned
+    // by user input, and the unit toggle converts them rather than re-reading storage.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hydrated]);
 
   const updateWeightLiftedAndCache = (weightLifted: number) => {
     setLastWeightLifted(weightLifted);
@@ -68,12 +68,10 @@ export default function OneRepMaxCalc() {
       updateWeightLiftedAndCache(Math.round(weightLifted * 2.20462));
     }
 
-    setWeightUnits(val.toString());
-    setUnitPreference(val);
+    setUnits(val.toString());
     logEvent('change_units_pref_orm');
   };
 
-  const isMetric = isMetricWeights();
   const helpMemoized = useMemo(() => {
     return (
       <Card padding='xl' radius='lg' withBorder>
@@ -105,7 +103,7 @@ export default function OneRepMaxCalc() {
           <div className='text-center'>
             <SegmentedControl
               fullWidth
-              value={unitPreference}
+              value={units}
               onChange={updateUnitPreference}
               data={[
                 { label: 'Imperial (Lbs)', value: 'lbs' },
@@ -114,7 +112,7 @@ export default function OneRepMaxCalc() {
             />
             <Space h={12} />
             <Title id='weightInputLabel' order={2} size='h4' pb={8}>
-              Weight ({getWeightUnits()})
+              Weight ({units})
             </Title>
             <Group gap={0}>
               <Button

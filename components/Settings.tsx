@@ -1,14 +1,10 @@
 import { logEvent } from '@/util/analytics';
 import {
-  areClientPreferencesLoaded,
-  loadClientPreferences,
-} from '@/util/clientPreferences';
-import {
-  formatWeight,
-  getWeightUnits,
-  isMetricWeights,
-  setWeightUnits,
-} from '@/util/formatter';
+  getDefaultPlates,
+  getStoredPlates,
+  setStoredPlates,
+} from '@/util/plates';
+import { useFormatWeight, useUnitPreference } from '@/util/units';
 import {
   Card,
   MantineColorScheme,
@@ -21,22 +17,12 @@ import {
 } from '@mantine/core';
 import { SetStateAction, useEffect, useState } from 'react';
 
-const ALL_METRIC_PLATES = [25, 20, 15, 10, 5, 2.5, 2, 1.5, 1.25, 1, 0.5];
-const ALL_IMPERIAL_PLATES = [45, 35, 25, 10, 5, 2.5];
-
 export default function Settings() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
-  const [unitPreference, setUnitPreference] =
-    useState<string>(getWeightUnits());
-
-  useEffect(() => {
-    loadClientPreferences();
-    setUnitPreference(getWeightUnits());
-  }, []);
+  const { units, setUnits } = useUnitPreference();
 
   const updateUnitPreference = (val: SetStateAction<string>) => {
-    setWeightUnits(val.toString());
-    setUnitPreference(val);
+    setUnits(val.toString());
     logEvent('change_units_pref_settings');
   };
 
@@ -73,7 +59,7 @@ export default function Settings() {
         <Radio.Group
           name='unitPreference'
           label='Preferred Units'
-          value={unitPreference}
+          value={units}
           onChange={updateUnitPreference}
         >
           <Stack mt='xs'>
@@ -88,37 +74,22 @@ export default function Settings() {
   );
 }
 
-export function getAvailableWeights(): number[] {
-  const defaults = isMetricWeights() ? ALL_METRIC_PLATES : ALL_IMPERIAL_PLATES;
-
-  // Called during render by PlateLoader, which is on the prerendered path via Help.
-  if (!areClientPreferencesLoaded()) {
-    return defaults;
-  }
-
-  const userDefined = localStorage
-    .getItem(`availableWeights${getWeightUnits()}`)
-    ?.split(',')
-    ?.map(parseFloat);
-
-  return userDefined ?? defaults;
-}
-
 function AvailableWeights() {
-  const isMetric = isMetricWeights();
-  const plates = isMetricWeights() ? ALL_METRIC_PLATES : ALL_IMPERIAL_PLATES;
+  const { units, isMetric, hydrated } = useUnitPreference();
+  const formatWeight = useFormatWeight();
+  const plates = getDefaultPlates(isMetric);
   const [selectedPlates, setSelectedPlates] = useState<string[]>([]);
 
   useEffect(() => {
-    loadClientPreferences();
-    setSelectedPlates(getAvailableWeights().map((p) => p.toString()));
-  }, [isMetric]);
+    if (!hydrated) {
+      return;
+    }
+
+    setSelectedPlates(getStoredPlates(units, isMetric).map((p) => p.toString()));
+  }, [units, isMetric, hydrated]);
 
   const updateAvailableWeight = (plates: string[]) => {
-    localStorage.setItem(
-      `availableWeights${getWeightUnits()}`,
-      plates.sort((a, b) => parseFloat(b) - parseFloat(a)).toString()
-    );
+    setStoredPlates(units, plates);
     setSelectedPlates(plates);
     logEvent('change_available_weights_settings');
   };

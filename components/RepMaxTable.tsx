@@ -1,4 +1,4 @@
-import { FormatWeight, formatWeight } from '@/util/formatter';
+import { FormatWeight, useFormatWeight } from '@/util/units';
 import { calculateMetrics } from '@/util/mathUtils';
 import {
   MultiFormulaRepMaxValues,
@@ -47,6 +47,7 @@ export const RepMaxRowContent = ({
   const { avg, color, stdDeviation, percentDeviation } = calculateMetrics(
     repMaxCalculation.map((c) => c.value)
   );
+  const formatWeight = useFormatWeight();
 
   return (
     <div>

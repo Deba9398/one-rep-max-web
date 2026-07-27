@@ -1,7 +1,11 @@
-import { FormatWeight, formatWeight, isMetricWeights } from '@/util/formatter';
+import {
+  FormatWeight,
+  useFormatWeight,
+  useIsMetric,
+} from '@/util/units';
 import { Title, Text, Button, Alert } from '@mantine/core';
 import './PlateLoader.css';
-import { getAvailableWeights } from '../Settings';
+import { getBarWeight, useAvailablePlates } from '@/util/plates';
 import { SVGProps, useCallback, useEffect, useState } from 'react';
 import {
   IconAlertTriangleFilled,
@@ -14,9 +18,10 @@ function roundWeightToSmallestPlate(
   weight: number,
   smallestPlate: number,
   rounding: 'floor' | 'closest',
-  weightAdjustment: number
+  weightAdjustment: number,
+  isMetric: boolean
 ) {
-  const barWeight = getBarWeight();
+  const barWeight = getBarWeight(isMetric);
   const smallestIncrement = smallestPlate * 2;
 
   weight += smallestIncrement * weightAdjustment;
@@ -33,19 +38,17 @@ function roundWeightToSmallestPlate(
   return plateWeights + barWeight;
 }
 
-const getBarWeight = () => {
-  const isMetric = isMetricWeights();
-  return isMetric ? 20 : 45;
-};
-
 export default function PlateLoader({ weight }: { weight: number }) {
   const [weightAdjustment, setWeightAdjustment] = useState<number>(0);
-  const plateWeights = getAvailableWeights();
+  const isMetric = useIsMetric();
+  const formatWeight = useFormatWeight();
+  const plateWeights = useAvailablePlates();
   const roundedWeight = roundWeightToSmallestPlate(
     weight,
     plateWeights[plateWeights.length - 1],
     'floor',
-    weightAdjustment
+    weightAdjustment,
+    isMetric
   );
 
   useEffect(() => {
@@ -114,9 +117,9 @@ function LoadedBarbellVisual({
   weight: number;
   weightAdjustmentCallback: (weight: number) => void;
 }) {
-  const isMetric = isMetricWeights();
-  const barWeight = isMetric ? 20 : 45;
-  const plateWeights = getAvailableWeights();
+  const isMetric = useIsMetric();
+  const barWeight = getBarWeight(isMetric);
+  const plateWeights = useAvailablePlates();
 
   let weightToLoad = (weight - barWeight) / 2;
   let platesNeeded: number[] = [];
