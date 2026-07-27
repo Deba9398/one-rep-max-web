@@ -1,10 +1,6 @@
 'use client';
-import dynamic from 'next/dynamic';
-
-const SettingsNoSsr = dynamic(() => import('../../components/Settings'), {
-  ssr: false,
-});
+import SettingsPanel from '@/components/Settings';
 
 export default function Settings() {
-  return <SettingsNoSsr />;
+  return <SettingsPanel />;
 }

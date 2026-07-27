@@ -1,5 +1,9 @@
 import { logEvent } from '@/util/analytics';
 import {
+  areClientPreferencesLoaded,
+  loadClientPreferences,
+} from '@/util/clientPreferences';
+import {
   formatWeight,
   getWeightUnits,
   isMetricWeights,
@@ -24,6 +28,11 @@ export default function Settings() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const [unitPreference, setUnitPreference] =
     useState<string>(getWeightUnits());
+
+  useEffect(() => {
+    loadClientPreferences();
+    setUnitPreference(getWeightUnits());
+  }, []);
 
   const updateUnitPreference = (val: SetStateAction<string>) => {
     setWeightUnits(val.toString());
@@ -80,16 +89,19 @@ export default function Settings() {
 }
 
 export function getAvailableWeights(): number[] {
+  const defaults = isMetricWeights() ? ALL_METRIC_PLATES : ALL_IMPERIAL_PLATES;
+
+  // Called during render by PlateLoader, which is on the prerendered path via Help.
+  if (!areClientPreferencesLoaded()) {
+    return defaults;
+  }
+
   const userDefined = localStorage
     .getItem(`availableWeights${getWeightUnits()}`)
     ?.split(',')
     ?.map(parseFloat);
 
-  if (userDefined) {
-    return userDefined;
-  }
-
-  return isMetricWeights() ? ALL_METRIC_PLATES : ALL_IMPERIAL_PLATES;
+  return userDefined ?? defaults;
 }
 
 function AvailableWeights() {
@@ -98,6 +110,7 @@ function AvailableWeights() {
   const [selectedPlates, setSelectedPlates] = useState<string[]>([]);
 
   useEffect(() => {
+    loadClientPreferences();
     setSelectedPlates(getAvailableWeights().map((p) => p.toString()));
   }, [isMetric]);
 

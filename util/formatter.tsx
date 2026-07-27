@@ -1,4 +1,10 @@
-let cachedUnitPreference: string = readUnitPreference();
+import { areClientPreferencesLoaded } from './clientPreferences';
+
+// What the build-time render and the browser's first render both use, before the stored
+// preference is available. See util/clientPreferences.ts.
+const DEFAULT_UNIT_PREFERENCE = 'lbs';
+
+let cachedUnitPreference: string | null = null;
 
 function readUnitPreference() {
   const userPref = localStorage.getItem('unitPreference');
@@ -15,6 +21,11 @@ export function setWeightUnits(units: string) {
 }
 
 export function getWeightUnits() {
+  if (!areClientPreferencesLoaded()) {
+    return DEFAULT_UNIT_PREFERENCE;
+  }
+
+  cachedUnitPreference ??= readUnitPreference();
   return cachedUnitPreference;
 }
 
@@ -30,16 +41,13 @@ export function formatWeight(
   decimalPlaces: number = 0,
   forceDecimals = true
 ) {
-  if (!cachedUnitPreference) {
-    cachedUnitPreference = readUnitPreference();
-  }
-
+  const units = getWeightUnits();
   const roundedWeight = roundToDecimalPlaces(weight, decimalPlaces);
 
   if (forceDecimals) {
-    return `${roundedWeight.toFixed(decimalPlaces)} ${cachedUnitPreference}`;
+    return `${roundedWeight.toFixed(decimalPlaces)} ${units}`;
   }
-  return `${roundedWeight} ${cachedUnitPreference}`;
+  return `${roundedWeight} ${units}`;
 }
 
 export function FormatWeight({
@@ -53,10 +61,7 @@ export function FormatWeight({
   forceDecimals?: boolean;
   littleDecimal?: boolean;
 }) {
-  if (!cachedUnitPreference) {
-    cachedUnitPreference = readUnitPreference();
-  }
-
+  const units = getWeightUnits();
   const roundedWeight = roundToDecimalPlaces(weight, decimalPlaces);
   const displayWeight = forceDecimals
     ? roundedWeight.toFixed(decimalPlaces)
@@ -72,7 +77,7 @@ export function FormatWeight({
           marginLeft: '0.3em',
         }}
       >
-        {cachedUnitPreference}
+        {units}
       </span>
     </span>
   );

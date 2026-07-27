@@ -19,9 +19,10 @@ import {
   Title,
 } from '@mantine/core';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
-import { SetStateAction, useMemo, useRef, useState } from 'react';
+import { SetStateAction, useEffect, useMemo, useRef, useState } from 'react';
 import { HelpContent } from './Help';
 import { logEvent } from '@/util/analytics';
+import { loadClientPreferences } from '@/util/clientPreferences';
 import {
   getLastRepsPerformed,
   getLastWeightLifted,
@@ -40,6 +41,15 @@ export default function OneRepMaxCalc() {
   const [unitPreference, setUnitPreference] = useState<string>(
     getWeightUnits()
   );
+
+  // Everything above renders with build-time defaults so the markup matches the static
+  // HTML; swap in the visitor's saved values once we're past hydration.
+  useEffect(() => {
+    loadClientPreferences();
+    setUnitPreference(getWeightUnits());
+    setWeightLifted(getLastWeightLifted());
+    setRepsPerformed(getLastRepsPerformed());
+  }, []);
 
   const updateWeightLiftedAndCache = (weightLifted: number) => {
     setLastWeightLifted(weightLifted);

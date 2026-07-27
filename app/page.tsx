@@ -1,9 +1,5 @@
 'use client';
-import dynamic from 'next/dynamic';
-
-const OneRepMaxCalc = dynamic(() => import('../components/OneRepMaxCalc'), {
-  ssr: false,
-});
+import OneRepMaxCalc from '@/components/OneRepMaxCalc';
 
 export default function Home() {
   return <OneRepMaxCalc />;

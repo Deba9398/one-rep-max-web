@@ -1,9 +1,16 @@
+import { areClientPreferencesLoaded } from './clientPreferences';
 import { isMetricWeights } from './formatter';
 
 const LAST_WEIGHT_LIFTED_KEY = 'lastWeightLifted';
 const LAST_REPS_PERFORMED_KEY = 'lastRepsPerformed';
 
+export const DEFAULT_REPS_PERFORMED = 8;
+
 function getNumberFromLocalStorage(key: string) {
+  if (!areClientPreferencesLoaded()) {
+    return null;
+  }
+
   const savedNumber = localStorage.getItem(key);
 
   if (savedNumber !== null && !isNaN(Number(savedNumber))) {
@@ -25,7 +32,7 @@ export function setLastWeightLifted(weightLifted: number) {
 
 export function getLastRepsPerformed() {
   const savedNumber = getNumberFromLocalStorage(LAST_REPS_PERFORMED_KEY);
-  return savedNumber ?? 8;
+  return savedNumber ?? DEFAULT_REPS_PERFORMED;
 }
 
 export function setLastRepsPerformed(weightLifted: number) {
