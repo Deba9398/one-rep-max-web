@@ -174,6 +174,12 @@ function NavBar() {
         active={pathname === '/terms'}
       />
       <NavLink
+        label='Privacy Policy'
+        component={Link}
+        href='/privacy'
+        active={pathname === '/privacy'}
+      />
+      <NavLink
         label='Strength Standards'
         href='https://exrx.net/Testing/WeightLifting/StrengthStandards'
         target='_blank'

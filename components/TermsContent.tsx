@@ -1,4 +1,4 @@
-import { Title, Text, Stack } from '@mantine/core';
+import { Anchor, Title, Text, Stack } from '@mantine/core';
 
 // Bump when the terms change materially; visitors who accepted an older version are
 // asked again. EulaBanner compares the stored value against this.
@@ -238,8 +238,11 @@ export default function TermsContent() {
         browser and are not transmitted to us. The Application uses Google
         Analytics to collect anonymous, aggregated usage information such as page
         views and feature interactions. Your use of the Application is also
-        governed by our Privacy Policy, which is incorporated into this Agreement
-        by reference. If this Agreement conflicts with the Privacy Policy
+        governed by our{' '}
+        <Anchor href='/privacy'>
+          Privacy Policy
+        </Anchor>
+        , which is incorporated into this Agreement by reference. If this Agreement conflicts with the Privacy Policy
         regarding personal information, the Privacy Policy controls for that
         issue.
       </Text>
@@ -323,8 +326,11 @@ export default function TermsContent() {
         19. Entire Agreement and Updates
       </Title>
       <Text size='sm'>
-        This Agreement, together with our Privacy Policy, constitutes the entire
-        agreement between you and Code Gardener LLC with respect to the
+        This Agreement, together with our{' '}
+        <Anchor href='/privacy'>
+          Privacy Policy
+        </Anchor>
+        , constitutes the entire agreement between you and Code Gardener LLC with respect to the
         Application and supersedes all prior or contemporaneous understandings,
         agreements, representations, and warranties. Code Gardener LLC reserves
         the right to update this Agreement. Material changes will be reflected in
