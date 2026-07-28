@@ -72,8 +72,14 @@ export default function PrivacyContent() {
         >
           Google Analytics opt-out add-on
         </Anchor>{' '}
-        or any tracker-blocking browser or extension. Our hosting provider may
-        also keep standard server request logs, as essentially all web hosts do.
+        or any tracker-blocking browser or extension.
+      </Text>
+      <Text size='sm'>
+        The site is hosted on Cloudflare Pages, which keeps standard server
+        request logs and provides Cloudflare Web Analytics. Cloudflare Web
+        Analytics is cookieless: it does not use cookies, local storage, or
+        device fingerprinting to identify you, and reports only aggregate page
+        view and page speed information.
       </Text>
 
       <Title order={3} size='h5' mt='xs'>

@@ -6,14 +6,6 @@ import './globals.css';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-// Cloudflare Web Analytics. Cookieless and no consent banner required, unlike Google
-// Analytics. Paste the token from Cloudflare dashboard -> Web Analytics -> your site;
-// it is public, the same as the GA measurement id. Leave empty to not load the beacon.
-//
-// Not needed at all if the site runs on Cloudflare Pages with Web Analytics enabled in
-// the project settings -- Cloudflare injects the beacon at the edge in that case.
-const CLOUDFLARE_BEACON_TOKEN = '';
-
 export const metadata: Metadata = {
   title: '1 Rep Max (1RM) Calculator',
   description:
@@ -39,13 +31,8 @@ export default function RootLayout({
         <ColorSchemeScript defaultColorScheme='auto' />
       </head>
       <body>{children}</body>
-      {isProduction && CLOUDFLARE_BEACON_TOKEN && (
-        <script
-          defer
-          src='https://static.cloudflareinsights.com/beacon.min.js'
-          data-cf-beacon={JSON.stringify({ token: CLOUDFLARE_BEACON_TOKEN })}
-        />
-      )}
+      {/* Cloudflare Web Analytics is enabled on the Pages project and injected at
+          the edge, so there is no beacon script to add here. */}
       {isProduction && <GoogleAnalytics gaId='G-TS8S6LZJLM' />}
     </html>
   );
