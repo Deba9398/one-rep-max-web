@@ -96,8 +96,9 @@ export default function OneRepMaxCalc() {
     variant: 'light',
   };
 
+  // Not <main>: AppShell.Main already renders the page's main landmark.
   return (
-    <main className='flex flex-col items-center'>
+    <div className='flex flex-col items-center'>
       <Box maw={600} mx='auto'>
         <Card padding='xl' radius='lg' withBorder>
           <div className='text-center'>
@@ -243,6 +244,6 @@ export default function OneRepMaxCalc() {
       <div className='container mx-auto mt-8 max-w-[1200px] xl:px-4'>
         {helpMemoized}
       </div>
-    </main>
+    </div>
   );
 }

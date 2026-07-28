@@ -23,6 +23,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
+import EulaBanner from '@/components/EulaBanner';
+import { useHydrated } from '@/util/units';
 
 const themeOverrides: MantineThemeOverride = {
   primaryShade: { light: 9, dark: 4 },
@@ -50,6 +52,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
 
   return (
     <MantineProvider defaultColorScheme='auto' theme={themeOverrides}>
+      <EulaBanner />
       <AppShell
         header={{ height: 64 }}
         navbar={{
@@ -95,9 +98,16 @@ export default function Template({ children }: { children: React.ReactNode }) {
 
 function ColorSchemeToggle() {
   const { setColorScheme } = useMantineColorScheme();
-  const computedColorScheme = useComputedColorScheme('light', {
+  const storedColorScheme = useComputedColorScheme('light', {
     getInitialValueInEffect: true,
   });
+  const hydrated = useHydrated();
+
+  // getInitialValueInEffect only defers the OS-level scheme; when the visitor has an
+  // explicit stored preference useComputedColorScheme returns it straight from
+  // localStorage on the first client render, which the prerendered HTML cannot match.
+  // Render what the server rendered until hydration is done.
+  const computedColorScheme = hydrated ? storedColorScheme : 'light';
 
   useEffect(() => {
     const metaThemeColor = document.querySelector('meta[name=theme-color]');
@@ -157,6 +167,18 @@ function NavBar() {
         />
       ))}
       <Divider my='sm' />
+      <NavLink
+        label='Terms of Use'
+        component={Link}
+        href='/terms'
+        active={pathname === '/terms'}
+      />
+      <NavLink
+        label='Privacy Policy'
+        component={Link}
+        href='/privacy'
+        active={pathname === '/privacy'}
+      />
       <NavLink
         label='Strength Standards'
         href='https://exrx.net/Testing/WeightLifting/StrengthStandards'

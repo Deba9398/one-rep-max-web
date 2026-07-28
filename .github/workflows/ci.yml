@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Superseded runs on the same ref are pointless once a newer commit exists.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      # node-version-file keeps this in step with the Node that Cloudflare Pages
+      # builds on, so CI cannot pass on a version production never sees.
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .node-version
+          cache: yarn
+
+      # Yarn 4 bootstraps from the committed .yarn/releases binary via yarnPath,
+      # so there is no corepack step. --immutable fails the build if yarn.lock is
+      # out of date rather than silently resolving something new.
+      - run: yarn install --immutable
+
+      - run: yarn lint
+
+      - run: yarn test
+
+      - run: yarn build
