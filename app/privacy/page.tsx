@@ -1,11 +1,19 @@
 import type { Metadata } from 'next';
 import { Box, Card, Title } from '@mantine/core';
 import PrivacyContent from '@/components/PrivacyContent';
+import { pageSocialMetadata } from '@/util/site';
+
+const title = 'Privacy Policy | 1 Rep Max (1RM) Calculator';
+const description =
+  'Privacy policy for the 1 Rep Max Calculator. Your lifts and settings are stored in your own browser and are never sent to us. Explains what Google Analytics collects and how to opt out.';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | 1 Rep Max (1RM) Calculator',
-  description:
-    'Privacy policy for the 1 Rep Max Calculator. Your lifts and settings are stored in your own browser and are never sent to us. Explains what Google Analytics collects and how to opt out.',
+  title,
+  description,
+  alternates: {
+    canonical: '/privacy',
+  },
+  ...pageSocialMetadata({ title, description, path: '/privacy' }),
 };
 
 export default function PrivacyPage() {
