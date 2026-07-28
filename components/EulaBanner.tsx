@@ -7,6 +7,9 @@ import { useHydrated } from '@/util/units';
 import { TERMS_VERSION } from './TermsContent';
 
 const STORAGE_KEY = 'eulaAccepted';
+// Section 1 of the terms states that a record of the accepted version and the time of
+// acceptance is kept locally, matching what the Android app records.
+const ACCEPTED_AT_KEY = 'eulaAcceptedAt';
 
 // A dismissible bar rather than a blocking modal: an interstitial covering the content
 // on arrival from search is what Google's intrusive interstitial guidance penalises,
@@ -22,6 +25,7 @@ export default function EulaBanner() {
 
   function accept() {
     localStorage.setItem(STORAGE_KEY, TERMS_VERSION);
+    localStorage.setItem(ACCEPTED_AT_KEY, new Date().toISOString());
     setDismissed(true);
     logEvent('accept_terms');
   }
@@ -49,11 +53,12 @@ export default function EulaBanner() {
       <Group justify='center' gap='md' wrap='wrap'>
         <Text size='sm' style={{ flex: '1 1 320px', maxWidth: 620 }}>
           Estimates are for information only &mdash; not medical, fitness, or
-          training advice. By continuing you accept the{' '}
+          training advice. Lifting carries risk of serious injury. By selecting
+          &quot;Got it&quot; you accept the{' '}
           <Anchor component={Link} href='/terms'>
             Terms of Use
           </Anchor>
-          .
+          , including an assumption of risk and a release of claims.
         </Text>
         <Group gap='xs' wrap='nowrap'>
           <Button
