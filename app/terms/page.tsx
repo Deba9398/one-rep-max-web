@@ -19,8 +19,9 @@ export const metadata: Metadata = {
 };
 
 export default function TermsPage() {
+  // Not <main>: AppShell.Main already renders the page's main landmark.
   return (
-    <main className='flex flex-col items-center'>
+    <div className='flex flex-col items-center'>
       <Box maw={800} mx='auto'>
         <Title order={2} size='h4' className='pb-4 pt-4 text-center'>
           Terms of Use &amp; Disclaimer
@@ -29,6 +30,6 @@ export default function TermsPage() {
           <TermsContent />
         </Card>
       </Box>
-    </main>
+    </div>
   );
 }

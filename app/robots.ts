@@ -9,8 +9,10 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      // Nothing to rank for, and it duplicates the shell of every other page.
-      disallow: '/settings',
+      // /settings is deliberately NOT disallowed. It carries robots: noindex, and a
+      // crawler that is blocked here never fetches the page to see that directive —
+      // Google can then still index the URL from inbound links. Blocking and
+      // noindexing the same URL are mutually exclusive; noindex is the one we want.
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
     host: SITE_URL,

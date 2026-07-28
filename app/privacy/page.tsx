@@ -17,8 +17,9 @@ export const metadata: Metadata = {
 };
 
 export default function PrivacyPage() {
+  // Not <main>: AppShell.Main already renders the page's main landmark.
   return (
-    <main className='flex flex-col items-center'>
+    <div className='flex flex-col items-center'>
       <Box maw={800} mx='auto'>
         <Title order={2} size='h4' className='pb-4 pt-4 text-center'>
           Privacy Policy
@@ -27,6 +28,6 @@ export default function PrivacyPage() {
           <PrivacyContent />
         </Card>
       </Box>
-    </main>
+    </div>
   );
 }
